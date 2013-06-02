@@ -12,13 +12,13 @@ class AstridValueError(Exception):
     )
 
 
-def parse_date(due):
-  """Parse astrid date value to object.
+def parse_timestamp(due):
+  """Parse astrid date/timestamp value to object.
 
-  >>> parse_date('1361905200000')
+  >>> parse_timestamp('1361905200000')
   datetime.datetime(2013, 2, 26, 12, 0)
 
-  >>> parse_date('1389812400000').isoformat()
+  >>> parse_timestamp('1389812400000').isoformat()
   '2014-01-15T12:00:00'
   """
 
@@ -28,7 +28,7 @@ def parse_date(due):
   # TODO: check for minimum length?
   # TODO: check that result is between 1900 and 2100?
   if not tail == '000':
-    raise AstridValueError('date', due)
+    raise AstridValueError('timestamp', due)
 
   # NOTE: this uses local timezone, which is probably what you want
   # but I'm not entirely sure about that yet
