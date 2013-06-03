@@ -1,6 +1,38 @@
 from __future__ import absolute_import
 from nose.tools import *
+import datetime
+
 from dear_astrid.parser import *
+
+# shortcut
+def one_task(fragment):
+  return parse_xml(
+    '<astrid format="2"><task {}></task></astrid>'.format(fragment)
+  )[0]
+
+def test_parse_xml():
+  assert_raises(AstridValueError, parse_xml, """<astrid format="3"/>""")
+
+  assert_equal(
+    one_task(
+      '''title="squid" importance="2" dueDate="1399748400402"
+      recurrence="" repeatUntil="0" deleted="0" completed="0"
+      '''
+    ),
+    {
+      'title':        u'squid',
+      'priority':     2,
+      'due_date':     datetime.datetime(2014, 5, 10, 12, 0, 0, 402000),
+      'recurrence':   None,
+      'repeat_until': None,
+      'completed':    None,
+      'deleted':      None,
+      'estimated':    None,
+      'elapsed':      None,
+      'tags':         ['astrid'],
+    }
+  )
+
 
 def test_parse_timestamp():
   def t(stamp, exp):
