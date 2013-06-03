@@ -2,9 +2,12 @@
 
 from datetime import datetime
 import re
+from xml.dom import minidom
 
 __all__ = [
   'AstridValueError',
+  'parse_xml',
+  'parse_task',
   'parse_timestamp',
   'parse_recurrence',
 ]
@@ -12,10 +15,54 @@ __all__ = [
 # TODO: ArgumentError?
 class AstridValueError(Exception):
   """Value does not match expected format and cannot be parsed"""
+
   def __init__(self, key, val):
     Exception.__init__(self,
       'Unknown format for Astrid {}: {}'.format(key, val)
     )
+
+
+# TODO: allow passing alternate parse_* callables?
+def parse_xml(xml=None):
+  """Parse xml string into list of task dictionaries"""
+
+  xml = minidom.parseString(xml)
+  format_ = xml.getElementsByTagName('astrid')[0].getAttribute('format')
+
+  if format_ != '2':
+    raise AstridValueError('xml', format_)
+
+  return [parse_task(t) for t in xml.getElementsByTagName('task')]
+
+
+def parse_task(element):
+  """Parse task element into a simple dictionaries."""
+
+  # use method object as shortcut
+  eattr = element.getAttribute
+
+  # other fields: timerStart flags is_public hideUntil
+  # flags2: remind when due?
+  task = {
+    'title':         eattr('title'),
+    'priority':      eattr('importance'),
+    'due_date':      parse_timestamp(eattr('dueDate')),
+    'recurrence':    parse_recurrence(eattr('recurrence')),
+    'repeat_until':  parse_timestamp(eattr('repeatUntil')),
+    'completed':     parse_timestamp(eattr('completed')),
+    'deleted':       parse_timestamp(eattr('deleted')),
+    'estimated':     eattr('estimatedSeconds'),
+    'elapsed':       eattr('elapsedSeconds'),
+    # tag everything with "astrid"
+    'tags':          ['astrid'],
+  }
+
+  for extra in element.getElementsByTagName('metadata'):
+    if extra.getAttribute('key') == 'tags-tag':
+      task['tags'].append(extra.getAttribute('value'))
+    # TODO: alarm
+
+  return task
 
 
 def parse_timestamp(stamp):
