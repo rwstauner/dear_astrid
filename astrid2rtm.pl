@@ -24,10 +24,8 @@ sub _build_xml_parser {
     ForceArray => [qw(
       task
       metadata
-      tags-tag
     )],
-  #KeyAttr => { metadata => 'key' },
-  #ValueAttr => { 'tags-tag' => 'value' },
+    KeyAttr => [],
   );
 }
 
@@ -43,6 +41,7 @@ sub run {
   die 'Only known to work with dump format == 2'
     if $astrid->{format} != 2;
 
+  #use YAML::Any; print YAML::Any::Dump($astrid->{task});
   print sort map { $self->smart_add($_) } @{ $astrid->{task} };
 
 }
@@ -109,7 +108,7 @@ sub smart_part {
 sub format_tags {
   my ($self, $task) = @_;
 
-  my $tags = $task->{metadata}{'tags-tag'} || [];
+  my $tags = [ grep { $_->{key} eq 'tags-tag' } @{ $task->{metadata} || [] } ];
   $tags = [$tags] unless ref($tags) eq 'ARRAY';
 
   return ( map { '#' . $_ }
