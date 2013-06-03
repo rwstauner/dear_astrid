@@ -3,6 +3,12 @@
 from datetime import datetime
 import re
 
+__all__ = [
+  'AstridValueError',
+  'parse_timestamp',
+  'parse_recurrence',
+]
+
 # TODO: ArgumentError?
 class AstridValueError(Exception):
   """Value does not match expected format and cannot be parsed"""
