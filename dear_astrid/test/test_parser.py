@@ -27,8 +27,8 @@ def test_parse_xml():
       'repeat_until': None,
       'completed':    None,
       'deleted':      None,
-      'estimated':    None,
-      'elapsed':      None,
+      'estimated':    0,
+      'elapsed':      0,
       'tags':         ['astrid'],
     }
   )

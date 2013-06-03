@@ -45,14 +45,15 @@ def parse_task(element):
   # flags2: remind when due?
   task = {
     'title':         eattr('title'),
-    'priority':      eattr('importance'),
+    # astrid's "no priority" is 3
+    'priority':      int(eattr('importance') or 3),
     'due_date':      parse_timestamp(eattr('dueDate')),
     'recurrence':    parse_recurrence(eattr('recurrence')),
     'repeat_until':  parse_timestamp(eattr('repeatUntil')),
     'completed':     parse_timestamp(eattr('completed')),
     'deleted':       parse_timestamp(eattr('deleted')),
-    'estimated':     eattr('estimatedSeconds'),
-    'elapsed':       eattr('elapsedSeconds'),
+    'estimated':     int(eattr('estimatedSeconds') or 0),
+    'elapsed':       int(eattr('elapsedSeconds')   or 0),
     # tag everything with "astrid"
     'tags':          ['astrid'],
   }
@@ -110,4 +111,5 @@ def parse_recurrence(rule):
 
   # TODO: use constants for normalization?
   # TODO: see icalendar.prop (vWeekday, etc) for parsing?
+  # TODO: cast to numbers
   return dict(s.split('=') for s in matched.group(1).split(';'))
