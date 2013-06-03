@@ -12,27 +12,32 @@ class AstridValueError(Exception):
     )
 
 
-def parse_timestamp(due):
-  """Parse astrid date/timestamp value to object.
+def parse_timestamp(stamp):
+  """Parse astrid date/timestamp (milliseconds) to a datetime instance.
 
-  >>> parse_timestamp('1361905200000')
-  datetime.datetime(2013, 2, 26, 12, 0)
+  This assumes a local time zone.
+  Hopefully it's the same timezone as your astrid device.
 
-  >>> parse_timestamp('1389812400000').isoformat()
-  '2014-01-15T12:00:00'
+  >>> parse_timestamp('1361905200321')
+  datetime.datetime(2013, 2, 26, 12, 0, 0, 321000)
+
+  >>> parse_timestamp('1389812400021').isoformat()
+  '2014-01-15T12:00:00.021000'
   """
 
-  # astrid dates have three extra digits on the end (ms?)
-  sec, tail = due[0:-3], due[-3:]
+  if not stamp or stamp == '0':
+    return
 
-  # TODO: check for minimum length?
-  # TODO: check that result is between 1900 and 2100?
-  if not tail == '000':
-    raise AstridValueError('timestamp', due)
+  try:
+    stamp = int(stamp)
+  except ValueError:
+    raise AstridValueError('timestamp', stamp)
 
-  # NOTE: this uses local timezone, which is probably what you want
-  # but I'm not entirely sure about that yet
-  return datetime.fromtimestamp(int(sec))
+  # Astrid timestamps are milliseconds so divide by 1000
+  # to get a unix timestamp (use '.0' to avoid rounding to whole numbers).
+  # NOTE: It is not documented that datetime.fromtimestamp accepts fractions
+  # so we might need to change this to call the constructor with ms * 1000.
+  return datetime.fromtimestamp(stamp / 1000.0)
 
 
 # TODO: consider parsing with https://github.com/collective/icalendar
