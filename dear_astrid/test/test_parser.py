@@ -1,8 +1,9 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
 
 from __future__ import absolute_import
-from nose.tools import *
 from datetime import datetime
+
+from nose.tools import *
 
 from dear_astrid.parser import *
 
