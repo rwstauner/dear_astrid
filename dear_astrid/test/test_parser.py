@@ -2,14 +2,14 @@
 
 from __future__ import absolute_import
 from nose.tools import *
-import datetime
+from datetime import datetime
 
 from dear_astrid.parser import *
 
 # shortcut
 def one_task(fragment):
   return parse_xml(
-    '<astrid format="2"><task {}></task></astrid>'.format(fragment)
+    '<astrid format="2">{}</astrid>'.format(fragment)
   )[0]
 
 def test_parse_xml():
@@ -17,14 +17,15 @@ def test_parse_xml():
 
   assert_equal(
     one_task(
-      '''title="squid" importance="2" dueDate="1399748400402"
-      recurrence="" repeatUntil="0" deleted="0" completed="0"
+      '''
+      <task title="squid" importance="2" dueDate="1399748400402"
+      recurrence="" repeatUntil="0" deleted="0" completed="0"/>
       '''
     ),
     {
       'title':        u'squid',
       'priority':     2,
-      'due_date':     datetime.datetime(2014, 5, 10, 12, 0, 0, 402000),
+      'due_date':     datetime(2014,  5, 10, 12,  0,  0, 402000),
       'recurrence':   None,
       'repeat_until': None,
       'completed':    None,
@@ -33,6 +34,31 @@ def test_parse_xml():
       'elapsed':      0,
       'tags':         ['astrid'],
       'notes':        None,
+    }
+  )
+
+  assert_equal(
+    one_task(
+      '''
+  <task attachments_pushed_at="0" calendarUri="" classification="" completed="0" created="1370213954565" creatorId="0" deleted="0" detailsDate="0" dueDate="1370397301000" elapsedSeconds="0" estimatedSeconds="0" flags="0" hideUntil="1369724400000" historyFetch="0" historyHasMore="0" importance="2" is_public="0" is_readonly="0" lastSync="0" modified="1370214160202" notes="First note&#10;Here" postponeCount="0" pushedAt="0" recurrence="RRULE:FREQ=DAILY;INTERVAL=12" notificationFlags="6" lastNotified="0" notifications="1209600000" snoozeTime="0" repeatUntil="1405817701000" socialReminder="unseen" timerStart="0" title="repeat and remind" user="" activities_pushed_at="0" userId="0" remoteId="950575745031257201">
+    <metadata created="1370214160080" deleted="0" key="alarm" value="1370214097446" value2="1" />
+    <metadata created="0" deleted="0" key="tags-tag" value="section 8" value2="2153874380669753982" value3="950575745031257201" />
+    <metadata created="0" deleted="0" key="tags-tag" value="Hard cheese" value2="799352962683373419" value3="950575745031257201" />
+  </task>
+      '''
+    ),
+    {
+      'title':        u'repeat and remind',
+      'priority':     2,
+      'due_date':     datetime(2013,  6,  4, 18, 55,  1),
+      'recurrence':   {u'FREQ': u'DAILY', u'INTERVAL': u'12'},
+      'repeat_until': datetime(2014,  7, 19, 17, 55,  1),
+      'completed':    None,
+      'deleted':      None,
+      'estimated':    0,
+      'elapsed':      0,
+      'notes':        u"First note\nHere",
+      'tags':         ['astrid', u'section 8', u'Hard cheese'],
     }
   )
 
