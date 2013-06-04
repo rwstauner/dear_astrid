@@ -101,7 +101,7 @@ def parse_recurrence(rule):
   """Convert astrid recurrence rule into dictionary
 
   >>> parse_recurrence('RRULE:FREQ=MONTHLY;INTERVAL=12')
-  {'FREQ': 'MONTHLY', 'INTERVAL': '12'}
+  {'FREQ': 'MONTHLY', 'INTERVAL': 12}
   """
 
   if not rule:
@@ -113,5 +113,12 @@ def parse_recurrence(rule):
 
   # TODO: use constants for normalization?
   # TODO: see icalendar.prop (vWeekday, etc) for parsing?
-  # TODO: cast to numbers
-  return dict(s.split('=') for s in matched.group(1).split(';'))
+
+  recur = dict(s.split('=') for s in matched.group(1).split(';'))
+
+  # cast numberic entries for ease of use
+  for key in ('INTERVAL',):
+    if key in recur:
+      recur[key] = int(recur[key])
+
+  return recur

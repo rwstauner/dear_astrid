@@ -51,7 +51,7 @@ def test_parse_xml():
       'title':        u'repeat and remind',
       'priority':     2,
       'due_date':     datetime(2013,  6,  4, 18, 55,  1),
-      'recurrence':   {u'FREQ': u'DAILY', u'INTERVAL': u'12'},
+      'recurrence':   {u'FREQ': u'DAILY', u'INTERVAL': 12},
       'repeat_until': datetime(2014,  7, 19, 17, 55,  1),
       'completed':    None,
       'deleted':      None,
@@ -87,8 +87,8 @@ def test_parse_recurrence():
   def t(rr, exp):
     assert_equal(parse_recurrence(rr), exp)
 
-  t('RRULE:FREQ=DAILY;INTERVAL=2', {'FREQ': 'DAILY', 'INTERVAL': '2'})
+  t('RRULE:FREQ=DAILY;INTERVAL=2', {'FREQ': 'DAILY', 'INTERVAL': 2})
   t('RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=SU',
-    {'FREQ':'WEEKLY', 'INTERVAL':'1', 'BYDAY':'SU'})
+    {'FREQ':'WEEKLY', 'INTERVAL': 1, 'BYDAY':'SU'})
 
   assert_raises(AstridValueError, parse_recurrence, '1367434800001')
