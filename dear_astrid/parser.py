@@ -42,6 +42,7 @@ def parse_task(element):
   eattr = element.getAttribute
 
   # other fields: timerStart flags is_public hideUntil
+  # created modified calendarUri details
   # flags2: remind when due?
   task = {
     'title':         eattr('title'),
