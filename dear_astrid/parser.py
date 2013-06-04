@@ -56,6 +56,7 @@ def parse_task(element):
     'elapsed':       int(eattr('elapsedSeconds')   or 0),
     # tag everything with "astrid"
     'tags':          ['astrid'],
+    'notes':         eattr('notes') or None,
   }
 
   for extra in element.getElementsByTagName('metadata'):

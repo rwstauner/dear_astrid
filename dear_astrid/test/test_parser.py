@@ -32,6 +32,7 @@ def test_parse_xml():
       'estimated':    0,
       'elapsed':      0,
       'tags':         ['astrid'],
+      'notes':        None,
     }
   )
 
