@@ -1,4 +1,8 @@
-"""Parse Astrid xml backup file into simple data structures."""
+"""
+Parse Astrid xml backup file into simple data structures.
+"""
+
+__docformat__ = 'reStructuredText'
 
 from datetime import datetime
 import re
@@ -12,9 +16,10 @@ __all__ = [
   'parse_recurrence',
 ]
 
-# TODO: ArgumentError?
+
+# should this subclass ValueError?
 class AstridValueError(Exception):
-  """Value does not match expected format and cannot be parsed"""
+  """Value does not match expected format and cannot be parsed."""
 
   def __init__(self, key, val):
     Exception.__init__(self,
@@ -74,11 +79,14 @@ def parse_timestamp(stamp):
   This assumes a local time zone.
   Hopefully it's the same timezone as your astrid device.
 
-  >>> parse_timestamp('1361905200321')
-  datetime.datetime(2013, 2, 26, 12, 0, 0, 321000)
+  ::
 
-  >>> parse_timestamp('1389812400021').isoformat()
-  '2014-01-15T12:00:00.021000'
+    >>> parse_timestamp('1361905200321')
+    datetime.datetime(2013, 2, 26, 12, 0, 0, 321000)
+
+    >>> parse_timestamp('1389812400021').isoformat()
+    '2014-01-15T12:00:00.021000'
+
   """
 
   if not stamp or stamp == '0':
@@ -98,10 +106,13 @@ def parse_timestamp(stamp):
 
 # TODO: consider parsing with https://github.com/collective/icalendar
 def parse_recurrence(rule):
-  """Convert astrid recurrence rule into dictionary
+  """Convert astrid recurrence rule into dictionary for simplicity.
 
-  >>> parse_recurrence('RRULE:FREQ=MONTHLY;INTERVAL=12')
-  {'FREQ': 'MONTHLY', 'INTERVAL': 12}
+  ::
+
+    >>> parse_recurrence('RRULE:FREQ=MONTHLY;INTERVAL=12')
+    {'FREQ': 'MONTHLY', 'INTERVAL': 12}
+
   """
 
   if not rule:
