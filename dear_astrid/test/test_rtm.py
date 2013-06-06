@@ -6,6 +6,36 @@ from nose.tools import *
 
 from dear_astrid.rtm import *
 
+def test_format_task():
+
+  assert_equal(
+    format_task({
+      'title':        u'squid',
+      'priority':     2,
+      'due_date':     datetime(2014,  5, 10, 12,  0,  0, 402000),
+      'recurrence':   None,
+      'repeat_until': None,
+      'completed':    None,
+      'deleted':      None,
+      'estimated':    0,
+      'elapsed':      0,
+      'tags':         ['astrid'],
+      'notes':        None,
+    }),
+    {
+      'name':         u'squid',
+      'priority':     3,
+      'due_date':     '2014-05-10T12:00:00.402000',
+      'repeat':       None,
+      'completed':    False,
+      'deleted':      False,
+      'estimated':    0,
+      'elapsed':      0,
+      'tags':         ['astrid'],
+      'notes':        None,
+    }
+  )
+
 def test_format_date():
   def t(dto, exp):
     assert_equal(format_date(dto), exp)
