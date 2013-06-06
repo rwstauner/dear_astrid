@@ -7,11 +7,42 @@ __docformat__ = 'reStructuredText'
 from dear_astrid.constants import *
 
 __all__ = [
+  'format_task',
   'format_date',
   'format_estimate',
   'format_priority',
   'format_repeat',
 ]
+
+# TODO: rtm.tasks.complete()
+# TODO: rtm.tasks.delete()
+def format_task(oldtask):
+  """Reformat task dictionary to make it ready to use with RTM."""
+
+  newtask = {
+    'name':     oldtask['title'],
+    'notes':    oldtask['notes'],
+    'priorty':  format_priority(oldtask['priority']),
+    'repeat':   format_repeat(oldtask['recurrence']),
+    # make a copy so we can modify it
+    'tags':     list(oldtask['tags']),
+  }
+
+  # datetime
+  for ts in ('due_date', 'repeat_until'):
+    newtask[ts] = format_date(oldtask[ts])
+
+  # seconds to minutes
+  # RTM doesn't do 'elapsed'.
+  for ts in ('estimated',):
+    newtask[ts] = format_estimate(oldtask[ts])
+
+  # bool (RTM doesn't take dates for these).
+  for ts in ('completed', 'deleted'):
+    newtask[ts] = bool(oldtask[ts])
+    newtask['tags'].append('astrid-' + ts)
+
+  return newtask
 
 
 def format_date(dto):
