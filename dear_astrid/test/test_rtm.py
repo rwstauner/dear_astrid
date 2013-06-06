@@ -26,3 +26,15 @@ def test_format_estimate():
   t(510,    '8.5 min')
   t(86400, '1440 min')
 
+def test_format_priority():
+  def t(pri, exp):
+    assert_equal(format_priority(pri), exp)
+
+  t(0, 1)
+  t(1, 2)
+  t(2, 3)
+  t(3, 4)
+  # out of bounds: no priority
+  t(-1, 4)
+  t(5, 4)
+  t('squid', 4)
