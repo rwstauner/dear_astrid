@@ -16,4 +16,13 @@ def test_format_date():
   t(datetime.fromtimestamp(1322207664), '2011-11-25T00:54:24')
   t(datetime.fromtimestamp(1342207664.579), '2012-07-13T12:27:44.579000')
 
+def test_format_estimate():
+  def t(sec, exp):
+    assert_equal(format_estimate(sec), exp)
+
+  t(300,      '5 min')
+  t(3600,    '60 min')
+  t(30,     '0.5 min')
+  t(510,    '8.5 min')
+  t(86400, '1440 min')
 
