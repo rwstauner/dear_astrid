@@ -4,10 +4,13 @@ Convert Astrid tasks to RTM tasks.
 
 __docformat__ = 'reStructuredText'
 
+from dear_astrid.constants import *
+
 __all__ = [
   'format_date',
   'format_estimate',
   'format_priority',
+  'format_repeat',
 ]
 
 
@@ -65,3 +68,49 @@ def format_priority(priority_):
   # off by one error ;-)
   # TODO: "!"
   return int(priority_) + 1
+
+
+# TODO: warn about "repeat after" tasks that have notes
+def format_repeat(repeat, until=None):
+  """Transform RRULE dictionary into RTM repeat interval.
+
+  ::
+
+    >>> format_repeat({'FREQ': 'MONTHLY', 'INTERVAL': 6})
+    'Every 6 months'
+
+    >>> import datetime
+    >>> repeat_until = datetime.datetime(2013, 6, 1)
+    >>> format_repeat({'FREQ': 'DAILY', 'INTERVAL': 1}, repeat_until)
+    'Every day until 2013-06-01T00:00:00'
+
+  """
+
+  parts = []
+
+  interval = int(repeat.get('INTERVAL', 0))
+  # ignore missing or zero
+  if interval:
+    unit = FREQUENCY_UNITS[repeat['FREQ']]
+    if interval == 1:
+      # 'Every year'
+      parts.extend(['Every', unit])
+    else:
+      # 'Every 2 days'
+      parts.extend(['Every', str(interval), unit + 's'])
+  else:
+    # 'Monthly'
+    parts.append(repeat['FREQ'].capitalize())
+
+  if 'BYDAY' in repeat:
+    byday = repeat['BYDAY']
+    dayname = byday
+    if byday in RRULE_WEEK_DAYS:
+      dayname = WEEK_DAY_NAMES[RRULE_WEEK_DAYS[byday]]
+    # 'on Tuesday'
+    parts.extend(['on', dayname])
+
+  if until:
+    parts.extend(['until', format_date(until)])
+
+  return ' '.join(parts)

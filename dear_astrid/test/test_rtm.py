@@ -38,3 +38,21 @@ def test_format_priority():
   t(-1, 4)
   t(5, 4)
   t('squid', 4)
+
+
+def test_format_repeat():
+  def t(rep, exp):
+    assert_equal(format_repeat(rep), exp)
+
+  # no INTERVAL
+  t({'FREQ': 'DAILY'}, 'Daily')
+
+  t({'FREQ': 'YEARLY',  'INTERVAL': 1}, 'Every year')
+  t({'FREQ': 'MONTHLY', 'INTERVAL': 2}, 'Every 2 months')
+
+  t({'FREQ': 'WEEKLY',  'INTERVAL': 2, 'BYDAY': 'TU'},
+    'Every 2 weeks on Tuesday')
+
+  # Return unknown BYDAY as is.
+  t({'FREQ': 'MONTHLY', 'INTERVAL': 3, 'BYDAY': 'CHEESE'},
+    'Every 3 months on CHEESE')
