@@ -29,8 +29,7 @@ def test_format_task():
       'repeat':       None,
       'completed':    False,
       'deleted':      False,
-      'estimated':    0,
-      'elapsed':      0,
+      'estimated':    None,
       'tags':         ['astrid'],
       'notes':        None,
     }

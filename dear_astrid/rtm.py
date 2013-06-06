@@ -22,14 +22,14 @@ def format_task(oldtask):
   newtask = {
     'name':     oldtask['title'],
     'notes':    oldtask['notes'],
-    'priorty':  format_priority(oldtask['priority']),
-    'repeat':   format_repeat(oldtask['recurrence']),
+    'priority': format_priority(oldtask['priority']),
+    'repeat':   format_repeat(oldtask['recurrence'], oldtask['repeat_until']),
     # make a copy so we can modify it
     'tags':     list(oldtask['tags']),
   }
 
   # datetime
-  for ts in ('due_date', 'repeat_until'):
+  for ts in ('due_date',):
     newtask[ts] = format_date(oldtask[ts])
 
   # seconds to minutes
@@ -40,7 +40,8 @@ def format_task(oldtask):
   # bool (RTM doesn't take dates for these).
   for ts in ('completed', 'deleted'):
     newtask[ts] = bool(oldtask[ts])
-    newtask['tags'].append('astrid-' + ts)
+    if newtask[ts]:
+      newtask['tags'].append('astrid-' + ts)
 
   return newtask
 
@@ -67,6 +68,9 @@ def format_estimate(seconds):
     '60 min'
 
   """
+
+  if not seconds:
+    return
 
   # Preserve fractions but only show them if non-zero.
   minutes = seconds / 60.0
@@ -116,6 +120,9 @@ def format_repeat(repeat, until=None):
     'Every day until 2013-06-01T00:00:00'
 
   """
+
+  if not repeat:
+    return
 
   parts = []
 
