@@ -35,6 +35,114 @@ def test_format_task():
     }
   )
 
+  assert_equal(
+    format_task({
+      'title':        u'repeat and remind',
+      'priority':     2,
+      'due_date':     datetime(2013,  6,  4, 18, 55,  1),
+      'recurrence':   {u'FREQ': u'DAILY', u'INTERVAL': 12},
+      'repeat_until': datetime(2014,  7, 19, 17, 55,  1),
+      'completed':    None,
+      'deleted':      None,
+      'estimated':    0,
+      'elapsed':      0,
+      'notes':        u"First note\nHere",
+      'tags':         ['astrid', u'section 8', u'Hard cheese'],
+    }),
+    {
+      'name':         u'repeat and remind',
+      'priority':     3,
+      'due_date':     '2013-06-04T18:55:01',
+      'repeat':       'Every 12 days until 2014-07-19T17:55:01',
+      'completed':    False,
+      'deleted':      False,
+      'estimated':    None,
+      'notes':        u"First note\nHere",
+      'tags':         ['astrid', u'section 8', u'Hard cheese'],
+    },
+  )
+
+  assert_equal(
+    format_task({
+      'title':        u'Completed no priority',
+      'priority':     3,
+      'due_date':     None,
+      'recurrence':   None,
+      'repeat_until': None,
+      'completed':    datetime(2013,  6,  2, 16,  3, 34, 527000),
+      'deleted':      None,
+      'estimated':    0,
+      'elapsed':      0,
+      'notes':        None,
+      'tags':         ['astrid'],
+    }),
+    {
+      'name':         u'Completed no priority',
+      'priority':     4,
+      'due_date':     None,
+      'repeat':       None,
+      'completed':    True,
+      'deleted':      False,
+      'estimated':    None,
+      'notes':        None,
+      'tags':         ['astrid', 'astrid-completed'],
+    },
+  )
+
+  assert_equal(
+    format_task({
+      'title':        u'Really important',
+      'priority':     0,
+      'due_date':     None,
+      'recurrence':   None,
+      'repeat_until': None,
+      'completed':    None,
+      'deleted':      None,
+      'estimated':    0,
+      'elapsed':      0,
+      'notes':        u'No, really',
+      'tags':         ['astrid', u'section 8', 'nifty'],
+    }),
+    {
+      'name':         u'Really important',
+      'priority':     1,
+      'due_date':     None,
+      'repeat':       None,
+      'completed':    False,
+      'deleted':      False,
+      'estimated':    None,
+      'notes':        u'No, really',
+      'tags':         ['astrid', u'section 8', 'nifty'],
+    },
+  )
+
+  assert_equal(
+    format_task({
+      'title':        u'Funky ch&rs !n ^title a =b',
+      'priority':     1,
+      'due_date':     None,
+      'recurrence':   dict(FREQ=u'WEEKLY', INTERVAL=3, BYDAY=u'TH'),
+      'repeat_until': None,
+      'completed':    None,
+      'deleted':      None,
+      'estimated':    8100,
+      'elapsed':      2100,
+      'notes':        None,
+      'tags':         ['astrid', 'Hard cheese'],
+    }),
+    {
+      'name':         u'Funky ch&rs !n ^title a =b',
+      'priority':     2,
+      'due_date':     None,
+      'repeat':       'Every 3 weeks on Thursday',
+      'completed':    False,
+      'deleted':      False,
+      'estimated':    '135 min',
+      'notes':        None,
+      'tags':         ['astrid', 'Hard cheese'],
+    },
+  )
+
 def test_format_date():
   def t(dto, exp):
     assert_equal(format_date(dto), exp)
