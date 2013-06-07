@@ -1,3 +1,9 @@
+.. image:: https://travis-ci.org/rwstauner/dear_astrid.png
+  :target: https://travis-ci.org/rwstauner/dear_astrid
+
+.. image:: https://coveralls.io/repos/rwstauner/dear_astrid/badge.png
+  :target: https://coveralls.io/r/rwstauner/dear_astrid
+
 Dear Astrid,
 ============
 
