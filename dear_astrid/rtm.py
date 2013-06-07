@@ -78,7 +78,7 @@ def format_estimate(seconds):
     minutes = int(minutes)
 
   # TODO: "="
-  return '{} min'.format(minutes)
+  return '{0} min'.format(minutes)
 
 
 def format_priority(priority_):

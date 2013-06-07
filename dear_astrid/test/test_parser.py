@@ -9,7 +9,7 @@ from dear_astrid.parser import *
 # shortcut
 def one_task(fragment):
   return parse_xml(
-    '<astrid format="2">{}</astrid>'.format(fragment)
+    '<astrid format="2">{0}</astrid>'.format(fragment)
   )[0]
 
 def test_parse_xml():

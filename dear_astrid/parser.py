@@ -23,7 +23,7 @@ class AstridValueError(Exception):
 
   def __init__(self, key, val):
     Exception.__init__(self,
-      'Unknown format for Astrid {}: {}'.format(key, val)
+      'Unknown format for Astrid {0}: {1}'.format(key, val)
     )
 
 
