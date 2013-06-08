@@ -91,16 +91,22 @@ def parse_timestamp(stamp):
   if not stamp or stamp == '0':
     return
 
+  # Astrid timestamps are milliseconds.  We could divide by 1000.0
+  # but that gets us into floating point trouble.  Instead, separate
+  # them while it's still a string, then put the fraction back on later.
+
+  # separate seconds from milliseconds (last three digits)
+  sec, ms = stamp[0:-3], stamp[-3:]
+
   try:
-    stamp = int(stamp)
+    sec = int(sec)
+    ms  = int(ms)
   except ValueError:
     raise AstridValueError('timestamp', stamp)
 
-  # Astrid timestamps are milliseconds so divide by 1000
-  # to get a unix timestamp (use '.0' to avoid rounding to whole numbers).
-  # NOTE: It is not documented that datetime.fromtimestamp accepts fractions
-  # so we might need to change this to call the constructor with ms * 1000.
-  return datetime.fromtimestamp(stamp / 1000.0, UTC)
+  dt = datetime.fromtimestamp(sec, UTC)
+  # put the microseconds on
+  return dt.replace(microsecond=(ms * 1000))
 
 
 # TODO: consider parsing with https://github.com/collective/icalendar
