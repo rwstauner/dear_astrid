@@ -115,8 +115,9 @@ def parse_recurrence(rule):
 
   ::
 
-    >>> parse_recurrence('RRULE:FREQ=MONTHLY;INTERVAL=12')
-    {'FREQ': 'MONTHLY', 'INTERVAL': 12}
+    >>> d = parse_recurrence('RRULE:FREQ=MONTHLY;INTERVAL=12')
+    >>> d == {'FREQ': 'MONTHLY', 'INTERVAL': 12}
+    True
 
   """
 
