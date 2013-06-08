@@ -26,7 +26,7 @@ def test_format_task():
     {
       'name':         u'squid',
       'priority':     3,
-      'due_date':     '2014-05-10T12:00:00.402000',
+      'due_date':     '2014-05-10T12:00:00Z',
       'repeat':       None,
       'completed':    False,
       'deleted':      False,
@@ -53,8 +53,8 @@ def test_format_task():
     {
       'name':         u'repeat and remind',
       'priority':     3,
-      'due_date':     '2013-06-04T18:55:01',
-      'repeat':       'Every 12 days until 2014-07-19T17:55:01',
+      'due_date':     '2013-06-04T18:55:01Z',
+      'repeat':       'Every 12 days until 2014-07-19T17:55:01Z',
       'completed':    False,
       'deleted':      False,
       'estimated':    None,
