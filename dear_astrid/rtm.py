@@ -53,10 +53,17 @@ def format_date(dto):
 
     >>> import datetime
     >>> format_date(datetime.datetime(2012, 12, 25, 13))
-    '2012-12-25T13:00:00'
+    '2012-12-25T13:00:00Z'
 
   """
-  return dto.isoformat() if dto else None
+  if not dto:
+    return
+
+  # RTM api docs say everything should be UTC (all examples end with 'Z').
+  # The docs don't mention microsecond, so ignore that
+  # (besides, the astrid dates that have microseconds are 'completed'
+  # and 'deleted' and we can't preserve those anyway).
+  return dto.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
 def format_estimate(seconds):
@@ -117,7 +124,7 @@ def format_repeat(repeat, until=None):
     >>> import datetime
     >>> repeat_until = datetime.datetime(2013, 6, 1)
     >>> format_repeat({'FREQ': 'DAILY', 'INTERVAL': 1}, repeat_until)
-    'Every day until 2013-06-01T00:00:00'
+    'Every day until 2013-06-01T00:00:00Z'
 
   """
 
