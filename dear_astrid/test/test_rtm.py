@@ -11,7 +11,7 @@ def test_format_task():
 
   assert_equal(
     format_task({
-      'title':        u'squid',
+      'title':        u('squid'),
       'priority':     2,
       'due_date':     datetime(2014,  5, 10, 12,  0,  0, 402000),
       'recurrence':   None,
@@ -24,7 +24,7 @@ def test_format_task():
       'notes':        None,
     }),
     {
-      'name':         u'squid',
+      'name':         u('squid'),
       'priority':     3,
       'due_date':     '2014-05-10T12:00:00Z',
       'repeat':       None,
@@ -38,34 +38,34 @@ def test_format_task():
 
   assert_equal(
     format_task({
-      'title':        u'repeat and remind',
+      'title':        u('repeat and remind'),
       'priority':     2,
       'due_date':     datetime(2013,  6,  4, 18, 55,  1),
-      'recurrence':   {u'FREQ': u'DAILY', u'INTERVAL': 12},
+      'recurrence':   {u('FREQ'): u('DAILY'), u('INTERVAL'): 12},
       'repeat_until': datetime(2014,  7, 19, 17, 55,  1),
       'completed':    None,
       'deleted':      None,
       'estimated':    0,
       'elapsed':      0,
-      'notes':        u"First note\nHere",
-      'tags':         ['astrid', u'section 8', u'Hard cheese'],
+      'notes':        u("First note\nHere"),
+      'tags':         ['astrid', u('section 8'), u('Hard cheese')],
     }),
     {
-      'name':         u'repeat and remind',
+      'name':         u('repeat and remind'),
       'priority':     3,
       'due_date':     '2013-06-04T18:55:01Z',
       'repeat':       'Every 12 days until 2014-07-19T17:55:01Z',
       'completed':    False,
       'deleted':      False,
       'estimated':    None,
-      'notes':        u"First note\nHere",
-      'tags':         ['astrid', u'section 8', u'Hard cheese'],
+      'notes':        u("First note\nHere"),
+      'tags':         ['astrid', u('section 8'), u('Hard cheese')],
     },
   )
 
   assert_equal(
     format_task({
-      'title':        u'Completed no priority',
+      'title':        u('Completed no priority'),
       'priority':     3,
       'due_date':     None,
       'recurrence':   None,
@@ -78,7 +78,7 @@ def test_format_task():
       'tags':         ['astrid'],
     }),
     {
-      'name':         u'Completed no priority',
+      'name':         u('Completed no priority'),
       'priority':     4,
       'due_date':     None,
       'repeat':       None,
@@ -92,7 +92,7 @@ def test_format_task():
 
   assert_equal(
     format_task({
-      'title':        u'Really important',
+      'title':        u('Really important'),
       'priority':     0,
       'due_date':     None,
       'recurrence':   None,
@@ -101,28 +101,28 @@ def test_format_task():
       'deleted':      None,
       'estimated':    0,
       'elapsed':      0,
-      'notes':        u'No, really',
-      'tags':         ['astrid', u'section 8', 'nifty'],
+      'notes':        u('No, really'),
+      'tags':         ['astrid', u('section 8'), 'nifty'],
     }),
     {
-      'name':         u'Really important',
+      'name':         u('Really important'),
       'priority':     1,
       'due_date':     None,
       'repeat':       None,
       'completed':    False,
       'deleted':      False,
       'estimated':    None,
-      'notes':        u'No, really',
-      'tags':         ['astrid', u'section 8', 'nifty'],
+      'notes':        u('No, really'),
+      'tags':         ['astrid', u('section 8'), 'nifty'],
     },
   )
 
   assert_equal(
     format_task({
-      'title':        u'Funky ch&rs !n ^title a =b',
+      'title':        u('Funky ch&rs !n ^title a =b'),
       'priority':     1,
       'due_date':     None,
-      'recurrence':   dict(FREQ=u'WEEKLY', INTERVAL=3, BYDAY=u'TH'),
+      'recurrence':   dict(FREQ=u('WEEKLY'), INTERVAL=3, BYDAY=u('TH')),
       'repeat_until': None,
       'completed':    None,
       'deleted':      None,
@@ -132,7 +132,7 @@ def test_format_task():
       'tags':         ['astrid', 'Hard cheese'],
     }),
     {
-      'name':         u'Funky ch&rs !n ^title a =b',
+      'name':         u('Funky ch&rs !n ^title a =b'),
       'priority':     2,
       'due_date':     None,
       'repeat':       'Every 3 weeks on Thursday',
