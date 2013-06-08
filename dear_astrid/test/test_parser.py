@@ -4,6 +4,7 @@ from datetime import datetime
 
 from nose.tools import *
 
+from dear_astrid.constants import *
 from dear_astrid.parser import *
 
 # shortcut
@@ -11,6 +12,12 @@ def one_task(fragment):
   return parse_xml(
     '<astrid format="2">{0}</astrid>'.format(fragment)
   )[0]
+
+def dtu(*args):
+  args = list(args)
+  while len(args) < 7:
+    args.append(0)
+  return datetime(*(args + [UTC]))
 
 def test_parse_xml():
   assert_raises(AstridValueError, parse_xml, """<astrid format="3"/>""")
@@ -25,7 +32,7 @@ def test_parse_xml():
     {
       'title':        u'squid',
       'priority':     2,
-      'due_date':     datetime(2014,  5, 10, 12,  0,  0, 402000),
+      'due_date':     dtu(2014,  5, 10, 19,  0,  0, 402000),
       'recurrence':   None,
       'repeat_until': None,
       'completed':    None,
@@ -50,9 +57,9 @@ def test_parse_xml():
     {
       'title':        u'repeat and remind',
       'priority':     2,
-      'due_date':     datetime(2013,  6,  4, 18, 55,  1),
+      'due_date':     dtu(2013,  6,  5,  1, 55,  1),
       'recurrence':   {u'FREQ': u'DAILY', u'INTERVAL': 12},
-      'repeat_until': datetime(2014,  7, 19, 17, 55,  1),
+      'repeat_until': dtu(2014,  7, 20,  0, 55,  1),
       'completed':    None,
       'deleted':      None,
       'estimated':    0,
@@ -74,7 +81,7 @@ def test_parse_xml():
       'due_date':     None,
       'recurrence':   None,
       'repeat_until': None,
-      'completed':    datetime(2013,  6,  2, 16,  3, 34, 527000),
+      'completed':    dtu(2013,  6,  2, 23,  3, 34, 527000),
       'deleted':      None,
       'estimated':    0,
       'elapsed':      0,
