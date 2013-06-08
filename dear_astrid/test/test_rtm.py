@@ -4,8 +4,8 @@ from datetime import datetime
 
 from nose.tools import *
 
-from dear_astrid.constants import *
 from dear_astrid.rtm import *
+from dear_astrid.test.helpers import *
 
 def test_format_task():
 
@@ -143,12 +143,6 @@ def test_format_task():
       'tags':         ['astrid', 'Hard cheese'],
     },
   )
-
-def dtu(*args):
-  args = list(args)
-  while len(args) < 7:
-    args.append(0)
-  return datetime(*(args + [UTC]))
 
 def test_format_date():
   def t(dto, exp):

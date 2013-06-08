@@ -4,20 +4,14 @@ from datetime import datetime
 
 from nose.tools import *
 
-from dear_astrid.constants import *
 from dear_astrid.parser import *
+from dear_astrid.test.helpers import *
 
 # shortcut
 def one_task(fragment):
   return parse_xml(
     '<astrid format="2">{0}</astrid>'.format(fragment)
   )[0]
-
-def dtu(*args):
-  args = list(args)
-  while len(args) < 7:
-    args.append(0)
-  return datetime(*(args + [UTC]))
 
 def test_parse_xml():
   assert_raises(AstridValueError, parse_xml, """<astrid format="3"/>""")
