@@ -8,6 +8,8 @@ from datetime import datetime
 import re
 from xml.dom import minidom
 
+from dear_astrid.constants import UTC
+
 __all__ = [
   'AstridValueError',
   'parse_xml',
@@ -76,16 +78,13 @@ def parse_task(element):
 def parse_timestamp(stamp):
   """Parse astrid date/timestamp (milliseconds) to a datetime instance.
 
-  This assumes a local time zone.
-  Hopefully it's the same timezone as your astrid device.
-
   ::
 
-    >>> parse_timestamp('1361905200321')
-    datetime.datetime(2013, 2, 26, 12, 0, 0, 321000)
+    >>> parse_timestamp('1361905200321') # doctest: +ELLIPSIS
+    datetime.datetime(2013, 2, 26, 19, 0, 0, 321000, tzinfo=...UTC...)
 
     >>> parse_timestamp('1389812400021').isoformat()
-    '2014-01-15T12:00:00.021000'
+    '2014-01-15T19:00:00.021000+00:00'
 
   """
 
@@ -101,7 +100,7 @@ def parse_timestamp(stamp):
   # to get a unix timestamp (use '.0' to avoid rounding to whole numbers).
   # NOTE: It is not documented that datetime.fromtimestamp accepts fractions
   # so we might need to change this to call the constructor with ms * 1000.
-  return datetime.fromtimestamp(stamp / 1000.0)
+  return datetime.fromtimestamp(stamp / 1000.0, UTC)
 
 
 # TODO: consider parsing with https://github.com/collective/icalendar

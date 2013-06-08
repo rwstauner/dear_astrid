@@ -1,5 +1,14 @@
 """Constants for Astrid task attributes"""
 
+import datetime
+
+__all__ = [
+  'FREQUENCY_UNITS',
+  'RRULE_WEEK_DAYS',
+  'WEEK_DAY_NAMES',
+  'UTC',
+]
+
 # TODO: make these all lists?
 FREQUENCY_UNITS = {
   'DAILY':   'day',
@@ -27,3 +36,21 @@ WEEK_DAY_NAMES = (
   'Friday',
   'Saturday',
 )
+
+# example from datetime.html#tzinfo-objects:
+
+ZERO = datetime.timedelta(0)
+
+class _UTC(datetime.tzinfo):
+  # pylint: disable=missing-docstring,unused-argument
+
+  def utcoffset(self, dt):
+    return ZERO
+
+  def tzname(self, dt):
+    return "UTC"
+
+  def dst(self, dt):
+    return ZERO
+
+UTC = _UTC()
