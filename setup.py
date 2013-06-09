@@ -1,5 +1,13 @@
 from setuptools import setup, find_packages
 
+try:
+  import nose.commands
+  extra_args = dict(
+    cmdclass={'test': nose.commands.nosetests},
+  )
+except ImportError:
+  extra_args = dict()
+
 setup(
   name='dear_astrid',
   version='0.1.0',
@@ -17,4 +25,7 @@ setup(
 
   install_requires=[
   ],
+  setup_requires=['nose>=1.0'],
+
+  **extra_args
 )
