@@ -1,5 +1,12 @@
+# from setup.py
 *.egg-info
 *.egg
+MANIFEST
+
+# test coverage
 /.coverage
+
 *.pyc
+
+# tox-managed virtual env's
 /.tox
