@@ -19,7 +19,7 @@ setup(
   #scripts=['bin/dear_astrid.py'],
 
   url='http://github.com/rwstauner/dear_astrid/',
-  #license='LICENSE.txt',
+  license='MIT',
   description='Migrate tasks from Astrid backup xml',
   long_description=open('README.rst').read(),
 
