@@ -148,6 +148,8 @@ def test_format_date():
   def t(dto, exp):
     assert_equal(format_date(dto), exp)
 
+  # TODO: test local
+
   t(dtu(1997,  3, 26,  0,  0,  0,      0), '1997-03-26T00:00:00Z')
   t(dtu(2012, 11,  3, 12, 34, 56, 789123), '2012-11-03T12:34:56Z')
 

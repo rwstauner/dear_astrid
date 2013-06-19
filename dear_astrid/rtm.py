@@ -4,7 +4,10 @@ Convert Astrid tasks to RTM tasks.
 
 __docformat__ = 'reStructuredText'
 
+import datetime
+
 from dear_astrid.constants import *
+from dear_astrid.tzinfo    import *
 
 __all__ = [
   'format_task',
@@ -46,7 +49,7 @@ def format_task(oldtask):
   return newtask
 
 
-def format_date(dto):
+def format_date(dto, local=False):
   """Format datetime unambiguously (isoformat).
 
   ::
@@ -63,7 +66,14 @@ def format_date(dto):
   # The docs don't mention microsecond, so ignore that
   # (besides, the astrid dates that have microseconds are 'completed'
   # and 'deleted' and we can't preserve those anyway).
-  return dto.strftime('%Y-%m-%dT%H:%M:%SZ')
+  fmt = '%Y-%m-%dT%H:%M:%SZ'
+
+  if local:
+    # If we do want local, strip the Z from the format.
+    fmt = fmt[:-1]
+    dto = dto.astimezone(LocalTimezone())
+
+  return dto.strftime(fmt)
 
 
 def format_estimate(seconds):
@@ -113,7 +123,7 @@ def format_priority(priority_):
 
 
 # TODO: warn about "repeat after" tasks that have notes
-def format_repeat(repeat, until=None):
+def format_repeat(repeat, until=None, local=False):
   """Transform RRULE dictionary into RTM repeat interval.
 
   ::
@@ -156,6 +166,6 @@ def format_repeat(repeat, until=None):
     parts.extend(['on', dayname])
 
   if until:
-    parts.extend(['until', format_date(until)])
+    parts.extend(['until', format_date(until, local)])
 
   return ' '.join(parts)
