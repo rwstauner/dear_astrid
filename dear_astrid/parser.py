@@ -8,7 +8,7 @@ from datetime import datetime
 import re
 from xml.dom import minidom
 
-from dear_astrid.constants import UTC
+from dear_astrid.tzinfo import UTC
 
 __all__ = [
   'AstridValueError',
@@ -104,7 +104,7 @@ def parse_timestamp(stamp):
   except ValueError:
     raise AstridValueError('timestamp', stamp)
 
-  dt = datetime.fromtimestamp(sec, UTC)
+  dt = datetime.fromtimestamp(sec, UTC())
   # put the microseconds on
   return dt.replace(microsecond=(ms * 1000))
 
