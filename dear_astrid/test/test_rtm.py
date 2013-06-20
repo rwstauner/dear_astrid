@@ -145,16 +145,25 @@ def test_format_task():
   )
 
 def test_format_date():
-  def t(dto, exp):
+  def t(dto, exp, tz, loc):
     assert_equal(format_date(dto), exp)
+    with timezone(tz):
+      assert_equal(format_date(dto, local=True), loc)
 
   # TODO: test local
 
-  t(dtu(1997,  3, 26,  0,  0,  0,      0), '1997-03-26T00:00:00Z')
-  t(dtu(2012, 11,  3, 12, 34, 56, 789123), '2012-11-03T12:34:56Z')
+  t(dtu(1997,  3, 26,  0,  0,  0,      0), '1997-03-26T00:00:00Z',
+    'America/Los_Angeles',                 '1997-03-25T16:00:00')
+  t(dtu(2012, 11, 30, 12, 34, 56, 789123), '2012-11-30T12:34:56Z',
+    'America/Chicago',                     '2012-11-30T06:34:56')
 
-  t(datetime.utcfromtimestamp(1322207664),     '2011-11-25T07:54:24Z')
-  t(datetime.utcfromtimestamp(1342207664.579), '2012-07-13T19:27:44Z')
+  t(datetime.utcfromtimestamp(1322207664).replace(tzinfo=UTC()),
+    '2011-11-25T07:54:24Z',
+    'UTC', '2011-11-25T07:54:24')
+  t(datetime.utcfromtimestamp(1342207664.579).replace(tzinfo=UTC()),
+    '2012-07-13T19:27:44Z',
+    # from the tzset(3) man page
+    'NZST-12:00:00NZDT-13:00:00,M10.1.0,M3.3.0', '2012-07-14T07:27:44')
 
 def test_format_estimate():
   def t(sec, exp):
