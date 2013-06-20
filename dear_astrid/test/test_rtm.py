@@ -8,12 +8,19 @@ from dear_astrid.rtm import *
 from dear_astrid.test.helpers import *
 
 def test_format_task():
+  def t(tsk, exp):
+    with timezone(exp.pop('tz', None)):
+      tsk = format_task(tsk)
+      # test smart_add separately to avoid excessively large diffs
+      smarts = [ d.pop('smart_add', None) for d in (tsk, exp) ]
+      assert_equal(tsk, exp)
+      assert_equal(*smarts)
 
-  assert_equal(
-    format_task({
+  t(
+    {
       'title':        u('squid'),
       'priority':     2,
-      'due_date':     datetime(2014,  5, 10, 12,  0,  0, 402000),
+      'due_date':     dtu(2014,  5, 10, 12,  0,  0, 402000),
       'recurrence':   None,
       'repeat_until': None,
       'completed':    None,
@@ -22,7 +29,7 @@ def test_format_task():
       'elapsed':      0,
       'tags':         ['astrid'],
       'notes':        None,
-    }),
+    },
     {
       'name':         u('squid'),
       'priority':     3,
@@ -33,23 +40,27 @@ def test_format_task():
       'estimated':    None,
       'tags':         ['astrid'],
       'notes':        None,
-    }
+      'tz':           'US/Eastern',
+      'smart_add':    u(
+        'squid ^2014-05-10T08:00:00 !3 #astrid'
+      ),
+    },
   )
 
-  assert_equal(
-    format_task({
+  t(
+    {
       'title':        u('repeat and remind'),
       'priority':     2,
-      'due_date':     datetime(2013,  6,  4, 18, 55,  1),
+      'due_date':     dtu(2013,  6,  4, 18, 55,  1),
       'recurrence':   {u('FREQ'): u('DAILY'), u('INTERVAL'): 12},
-      'repeat_until': datetime(2014,  7, 19, 17, 55,  1),
+      'repeat_until': dtu(2014,  7, 19, 17, 55,  1),
       'completed':    None,
       'deleted':      None,
       'estimated':    0,
       'elapsed':      0,
       'notes':        u("First note\nHere"),
       'tags':         ['astrid', u('section 8'), u('Hard cheese')],
-    }),
+    },
     {
       'name':         u('repeat and remind'),
       'priority':     3,
@@ -60,11 +71,17 @@ def test_format_task():
       'estimated':    None,
       'notes':        u("First note\nHere"),
       'tags':         ['astrid', u('section 8'), u('Hard cheese')],
+      'tz':           'America/Phoenix',
+      'smart_add':    u(
+        'repeat and remind ^2013-06-04T11:55:01'
+        ' !3 #astrid #section 8 #Hard cheese'
+        ' *Every 12 days until 2014-07-19T10:55:01'
+      ),
     },
   )
 
-  assert_equal(
-    format_task({
+  t(
+    {
       'title':        u('Completed no priority'),
       'priority':     3,
       'due_date':     None,
@@ -76,7 +93,7 @@ def test_format_task():
       'elapsed':      0,
       'notes':        None,
       'tags':         ['astrid'],
-    }),
+    },
     {
       'name':         u('Completed no priority'),
       'priority':     4,
@@ -87,11 +104,15 @@ def test_format_task():
       'estimated':    None,
       'notes':        None,
       'tags':         ['astrid', 'astrid-completed'],
+      'smart_add':    u(
+        'Completed no priority'
+        ' !4 #astrid #astrid-completed'
+      ),
     },
   )
 
-  assert_equal(
-    format_task({
+  t(
+    {
       'title':        u('Really important'),
       'priority':     0,
       'due_date':     None,
@@ -103,7 +124,7 @@ def test_format_task():
       'elapsed':      0,
       'notes':        u('No, really'),
       'tags':         ['astrid', u('section 8'), 'nifty'],
-    }),
+    },
     {
       'name':         u('Really important'),
       'priority':     1,
@@ -114,11 +135,15 @@ def test_format_task():
       'estimated':    None,
       'notes':        u('No, really'),
       'tags':         ['astrid', u('section 8'), 'nifty'],
+      'smart_add':    u(
+        'Really important'
+        ' !1 #astrid #section 8 #nifty'
+      ),
     },
   )
 
-  assert_equal(
-    format_task({
+  t(
+    {
       'title':        u('Funky ch&rs !n ^title a =b'),
       'priority':     1,
       'due_date':     None,
@@ -130,7 +155,7 @@ def test_format_task():
       'elapsed':      2100,
       'notes':        None,
       'tags':         ['astrid', 'Hard cheese'],
-    }),
+    },
     {
       'name':         u('Funky ch&rs !n ^title a =b'),
       'priority':     2,
@@ -141,6 +166,12 @@ def test_format_task():
       'estimated':    '135 min',
       'notes':        None,
       'tags':         ['astrid', 'Hard cheese'],
+      'smart_add':    u(
+        'Funky ch&rs !n ^title a =b'
+        ' !2 #astrid #Hard cheese'
+        ' *Every 3 weeks on Thursday'
+        ' =135 min'
+      ),
     },
   )
 

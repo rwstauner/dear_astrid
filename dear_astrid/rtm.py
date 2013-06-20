@@ -46,6 +46,27 @@ def format_task(oldtask):
     if newtask[ts]:
       newtask['tags'].append('astrid-' + ts)
 
+  # Build up the 'smart add' string for inspection.
+  smart = [newtask['name']]
+
+  if newtask['due_date'] is not None:
+    smart.append('^' + format_date(oldtask['due_date'], local=True))
+
+  if newtask['priority'] is not None:
+    smart.append('!' + str(newtask['priority']))
+
+  smart.extend('#' + t for t in newtask['tags'])
+
+  if newtask['repeat'] is not None:
+    smart.append('*' + format_repeat(
+      oldtask['recurrence'], oldtask['repeat_until'], local=True,
+    ))
+
+  if newtask['estimated']:
+    smart.append('=' + newtask['estimated'])
+
+  newtask['smart_add'] = ' '.join(smart)
+
   return newtask
 
 
