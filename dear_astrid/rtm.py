@@ -5,6 +5,7 @@ Convert Astrid tasks to RTM tasks.
 __docformat__ = 'reStructuredText'
 
 import datetime
+import re
 
 from dear_astrid.constants import *
 from dear_astrid.tzinfo    import *
@@ -47,7 +48,7 @@ def format_task(oldtask):
       newtask['tags'].append('astrid-' + ts)
 
   # Build up the 'smart add' string for inspection.
-  smart = [newtask['name']]
+  smart = [re.sub(r'(^| )([@^!#*=])', r'\1\\\2', newtask['name'])]
 
   if newtask['due_date'] is not None:
     smart.append('^' + format_date(oldtask['due_date'], local=True))
