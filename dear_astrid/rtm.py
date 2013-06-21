@@ -4,7 +4,6 @@ Convert Astrid tasks to RTM tasks.
 
 __docformat__ = 'reStructuredText'
 
-import datetime
 import re
 
 from dear_astrid.constants import *
@@ -47,28 +46,59 @@ def format_task(oldtask):
     if newtask[ts]:
       newtask['tags'].append('astrid-' + ts)
 
-  # Build up the 'smart add' string for inspection.
-  smart = [re.sub(r'(^| )([@^!#*=])', r'\1\\\2', newtask['name'])]
-
-  if newtask['due_date'] is not None:
-    smart.append('^' + format_date(oldtask['due_date'], local=True))
-
-  if newtask['priority'] is not None:
-    smart.append('!' + str(newtask['priority']))
-
-  smart.extend('#' + t for t in newtask['tags'])
-
-  if newtask['repeat'] is not None:
-    smart.append('*' + format_repeat(
-      oldtask['recurrence'], oldtask['repeat_until'], local=True,
-    ))
-
-  if newtask['estimated']:
-    smart.append('=' + newtask['estimated'])
-
-  newtask['smart_add'] = ' '.join(smart)
+  newtask['smart_add'] = smart_add(
+    name      = newtask['name'],
+    due_date  = format_date(oldtask['due_date'], local=True),
+    priority  = newtask['priority'],
+    tags      = newtask['tags'],
+    repeat    = format_repeat(oldtask['recurrence'],
+      oldtask['repeat_until'], local=True,
+    ),
+    estimated = newtask['estimated'],
+  )
 
   return newtask
+
+
+def smart_add(
+  name      = None,
+  due_date  = None,
+  priority  = None,
+  tags      = None,
+  repeat    = None,
+  estimated = None,
+):
+  """Turn values into RTM SmartAdd string.
+
+  ::
+
+    >>> smart_add(name='big red bird', priority=2, tags=['fuzzy', 'pink-feet'])
+    'big red bird !2 #fuzzy #pink-feet'
+
+    >>> smart_add(name='mail call', tags=['pea shooter'], estimated='60 min',
+    ...   due_date='2012-06-20T22:11:38', repeat='Every 3 days')
+    'mail call ^2012-06-20T22:11:38 #pea shooter *Every 3 days =60 min'
+
+  """
+
+  smart = [re.sub(r'(^| )([@^!#*=])', r'\1\\\2', name)]
+
+  if due_date:
+    smart.append('^' + due_date)
+
+  if priority:
+    smart.append('!' + str(priority))
+
+  if tags:
+    smart.extend(['#' + t for t in tags])
+
+  if repeat:
+    smart.append('*' + repeat)
+
+  if estimated:
+    smart.append('=' + estimated)
+
+  return ' '.join(smart)
 
 
 def format_date(dto, local=False):
