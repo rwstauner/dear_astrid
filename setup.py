@@ -1,3 +1,4 @@
+# TODO: use distribute
 from setuptools import setup, find_packages
 
 try:
@@ -19,7 +20,7 @@ setup(
   author='Randy Stauner',
   author_email='randy@magnificent-tears.com',
 
-  packages=find_packages(), #['dear_astrid', 'dear_astrid.test'],
+  packages=find_packages(),
   #scripts=['bin/dear_astrid.py'],
 
   url='http://github.com/rwstauner/dear_astrid/',
