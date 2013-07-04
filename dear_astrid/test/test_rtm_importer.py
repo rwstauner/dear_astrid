@@ -16,7 +16,7 @@ class TestRTMImport(TestCase):
       rtm  = patch('rtm.createRTM'),
     )
     self.mocks = dict()
-    for (k, v) in self.patches.iteritems():
+    for (k, v) in self.patches.items():
       self.mocks[k] = v.start()
 
   def test_sleep_before_rtm(self):
