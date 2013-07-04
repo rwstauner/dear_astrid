@@ -29,5 +29,10 @@ setup(
 
   setup_requires=['nose>=1.0'],
 
+  tests_require=[
+    'nose',
+    'mock',
+  ],
+
   **extra_args
 )
