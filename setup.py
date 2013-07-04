@@ -24,7 +24,9 @@ setup(
   long_description=open('README.rst').read(),
 
   install_requires=[
+    'pyrtm>=0.4.1',
   ],
+
   setup_requires=['nose>=1.0'],
 
   **extra_args
