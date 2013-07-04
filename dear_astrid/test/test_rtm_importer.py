@@ -7,7 +7,7 @@ from unittest import TestCase
 from nose.tools import *
 from mock import *
 
-from dear_astrid.rtm.importer import Importer as rtmimp
+from dear_astrid.rtm.importer import *
 
 class TestRTMImport(TestCase):
   def setUp(self):
@@ -20,26 +20,26 @@ class TestRTMImport(TestCase):
       self.mocks[k] = v.start()
 
   def test_sleep_before_rtm(self):
-    imp = rtmimp(['task'])
+    imp = Importer(['task'])
     imp._rtm = Mock()
 
     assert not self.mocks['time'].called
 
-    # assert that it is our mock object
+    # Assert that it is in fact our mock object.
     assert_equal(imp.rtm, imp._rtm)
 
     self.mocks['time'].assert_called_once_with(1)
 
-    # test calling other methods
+    # Test chaining method calls.
     imp.rtm.foo.bar
 
     self.mocks['time'].assert_has_calls([ call(1), call(1) ])
 
-    # not used this time
+    # Not used this time.
     assert not self.mocks['rtm'].called
 
   def test_deobfuscator(self):
-    imp = rtmimp(['task'])
+    imp = Importer(['task'])
 
     imp.key = 'a92'
     assert imp.key == '21a'
