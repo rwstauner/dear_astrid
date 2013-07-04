@@ -18,3 +18,8 @@ Dear Astrid,
 |
 | So, my precious little squid,
 | I'm leaving you for `a monkey named Bob <http://rememberthemilk.com>`_.
+
+----
+
+This program is in no way endorsed by or affiliated with Remember the Milk (TM)
+or Astrid ™, Todoroo ™, or Yahoo ™.
