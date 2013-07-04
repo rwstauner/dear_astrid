@@ -8,6 +8,10 @@ try:
 except ImportError:
   extra_args = dict()
 
+# TODO: would this work? (is the file included in the dist?)
+#tests_require = [l.strip() for l in open('test-requirements.txt').readlines()]
+tests_require = ['mock']
+
 setup(
   name='dear_astrid',
   version='0.1.0',
@@ -29,10 +33,11 @@ setup(
 
   setup_requires=['nose>=1.0'],
 
-  tests_require=[
-    'nose',
-    'mock',
-  ],
+  tests_require=tests_require,
+
+  extras_require={
+    'test': tests_require,
+  },
 
   **extra_args
 )
