@@ -41,14 +41,9 @@ class timezone(object):
   def __exit__(self, *args):
     self.set_env(self.orig)
 
-PY3 = False
-try:
-  PY3 = (sys.version_info.major == 3)
-except:
-  pass
+PY3 = sys.version_info >= (3,)
 
-if PY3:
-  def u(string):
-    return string
-else:
-  exec("def u(string):\n  return string + u''\n")
+def u(string):
+  if not PY3:
+    string = string.decode('utf-8')
+  return string
