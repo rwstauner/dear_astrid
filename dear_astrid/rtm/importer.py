@@ -11,7 +11,23 @@ import time
 
 import rtm
 
+class _slow(object):
+  def __init__(self, fget):
+    self.fget  = fget
+
+  # RTM docs request limiting API calls to one per second.
+  def __get__(self, obj, cls):
+    time.sleep(1)
+    self.fget(obj)
+
 class Importer(object):
+  def __init__(self, tasks):
+    self._rtm  = None
+
+  @_slow
+  def rtm(self):
+    return self._rtm
+
   def import_tasks(self):
     self.timeline = self.rtm.timelines.create().timeline
     self.list_id  = self.rtm.lists.add(timeline=self.timeline,
