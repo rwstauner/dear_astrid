@@ -46,6 +46,9 @@ def format_task(oldtask):
     if newtask[ts]:
       newtask['tags'].append('astrid-' + ts)
 
+  if newtask['notes']:
+    newtask['tags'].append('astrid-notes')
+
   newtask['smart_add'] = smart_add(
     name      = newtask['name'],
     due_date  = format_date(oldtask['due_date'], local=True),

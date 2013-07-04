@@ -70,11 +70,11 @@ def test_format_task():
       'deleted':      False,
       'estimated':    None,
       'notes':        u("First note\nHere"),
-      'tags':         ['astrid', u('section 8'), u('Hard cheese')],
+      'tags':         ['astrid', u('section 8'), u('Hard cheese'), 'astrid-notes'],
       'tz':           'America/Phoenix',
       'smart_add':    u(
         'repeat and remind ^2013-06-04T11:55:01'
-        ' !3 #astrid #section 8 #Hard cheese'
+        ' !3 #astrid #section 8 #Hard cheese #astrid-notes'
         ' *Every 12 days until 2014-07-19T10:55:01'
       ),
     },
@@ -134,10 +134,10 @@ def test_format_task():
       'deleted':      False,
       'estimated':    None,
       'notes':        u('No, really'),
-      'tags':         ['astrid', u('section 8'), 'nifty'],
+      'tags':         ['astrid', u('section 8'), 'nifty', 'astrid-notes'],
       'smart_add':    u(
         'Really important'
-        ' !1 #astrid #section 8 #nifty'
+        ' !1 #astrid #section 8 #nifty #astrid-notes'
       ),
     },
   )
