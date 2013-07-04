@@ -5,8 +5,13 @@ This product uses the Remember The Milk API
 but is not endorsed or certified by Remember The Milk.
 """
 
+from __future__ import absolute_import
+
 __docformat__ = 'reStructuredText'
 
+import sys
+if sys.version_info <= (3,):
+  import string
 import time
 
 import rtm
@@ -18,17 +23,36 @@ class _slow(object):
   # RTM docs request limiting API calls to one per second.
   def __get__(self, obj, cls):
     time.sleep(1)
-    self.fget(obj)
+    return self.fget(obj)
+
+class _rot(object):
+  def __init__(self, fname):
+    self.fname = fname
+    self.attr  = ' ' + fname
+    self.tr = self.maketrans('89abcdef01234567', '0123456789abcdef')
+
+  # 2to3
+  maketrans = string.maketrans if sys.version_info <= (3,) else str.maketrans
+
+  def __get__(self, obj, cls):
+    return getattr(obj, self.attr).translate(self.tr)
+  def __set__(self, obj, val):
+    setattr(obj, self.attr, val)
 
 class Importer(object):
-  def __init__(self, tasks):
+  def __init__(self):
     self._rtm  = None
+
+    # Please obtain your own api key/secret (it's easy!) rather than using
+    # these in another app: https://www.rememberthemilk.com/services/api/
+    self.key    = '7c564da6c23abeda8e028bf2390971c0'
+    self.secret = 'a885323e4a010a8d'
 
   @_slow
   def rtm(self):
     return self._rtm
 
-  def import_tasks(self):
+  def import_tasks(self, tasks):
     self.timeline = self.rtm.timelines.create().timeline
     self.list_id  = self.rtm.lists.add(timeline=self.timeline,
       name='Dear Astrid ' + time.time()).list.id
@@ -76,3 +100,6 @@ class Importer(object):
       rtm.tasks.delete(**args)
 
     return added
+
+  key    = _rot('key')
+  secret = _rot('secret')

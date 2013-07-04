@@ -37,3 +37,12 @@ class TestRTMImport(TestCase):
 
     # not used this time
     assert not self.mocks['rtm'].called
+
+  def test_deobfuscator(self):
+    imp = rtmimp(['task'])
+
+    imp.key = 'a92'
+    assert imp.key == '21a'
+
+    imp.secret = 'deadbeef'
+    assert imp.secret == '56253667'
