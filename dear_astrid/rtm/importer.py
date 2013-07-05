@@ -42,6 +42,8 @@ class _rot(object):
 class Importer(object):
   def __init__(self):
     self._rtm  = None
+    self.timeline = None
+    self.list_id  = None
 
     # Please obtain your own api key/secret (it's easy!) rather than using
     # these in another app: https://www.rememberthemilk.com/services/api/
@@ -61,7 +63,11 @@ class Importer(object):
       self.add_task(task)
 
   def add_task(self, task):
-    added = self.rtm.tasks.add(timeline=timeline, name=task['name'], parse=0)
+    # The pyrtm module is dynamic.
+    # pylint: disable=no-member
+
+    added = self.rtm.tasks.add(timeline=self.timeline,
+      name=task['name'], parse=0)
 
     args = dict(
       timeline      = self.timeline,
