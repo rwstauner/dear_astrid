@@ -10,12 +10,21 @@ from mock import *
 
 from dear_astrid.rtm.importer import *
 
+try:
+  raw_input
+  INPUT_FUNC = '__builtin__.raw_input'
+except NameError:
+  INPUT_FUNC = 'builtins.input'
+
 class TestRTMImport(TestCase):
   def setUp(self):
     self.patches = dict(
       time = patch('time.sleep'),
       rtm  = patch('rtm.createRTM'),
+      browser = patch('webbrowser.open'),
+      prompt  = patch(INPUT_FUNC)
     )
+
     self.mocks = dict()
     for (k, v) in self.patches.items():
       self.mocks[k] = v.start()
@@ -53,9 +62,6 @@ class TestRTMImport(TestCase):
     self.mocks['rtm'].assert_called_once_with('k', 's', 't')
     api.test.login.assert_called_once_with()
 
-    class AuthError(Exception):
-      pass
-
     # Prepare to test Exceptions raised on login test.
     login = Mock()
     login.test.login.side_effect = AuthError('oops')
@@ -88,3 +94,37 @@ class TestRTMImport(TestCase):
       assert True
 
     assert not login.called
+
+  def test_cli_auth(self):
+    url = 'jelly://bean'
+    token = 'cookies'
+
+    api = Mock()
+    api.getAuthURL.return_value = url
+    api.getToken.return_value = token
+
+    self.mocks['rtm'].return_value = api
+
+    # Don't print during the tests
+    CLIAuth.message = Mock()
+
+    api = CLIAuth('K', 'S').auth()
+
+    self.mocks['rtm'].assert_has_calls([
+      call('K', 'S', 'dear_astrid'),
+      # no test.login()
+      call().getAuthURL(),
+      call().getToken(),
+      call('K', 'S', token),
+      call().test.login(),
+    ])
+
+    self.mocks['browser'].called_once_with(url, True, True)
+
+    # Url printed to screen.
+    assert CLIAuth.message.call_args[0][2] == url
+
+    assert self.mocks['prompt'].call_count == 1
+    assert self.mocks['prompt'].call_args[0][0].startswith('Press Enter')
+
+    # TODO: assert_raises
