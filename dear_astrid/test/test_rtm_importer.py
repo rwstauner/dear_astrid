@@ -1,4 +1,5 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
+# pylint: disable=no-member
 
 from __future__ import absolute_import
 
@@ -46,3 +47,8 @@ class TestRTMImport(TestCase):
 
     imp.secret = 'deadbeef'
     assert imp.secret == '56253667'
+
+  def test_base_auth(self):
+    api = BaseAuth('k', 's', 't').auth()
+    self.mocks['rtm'].assert_called_once_with('k', 's', 't')
+    api.test.login.assert_called_once_with()

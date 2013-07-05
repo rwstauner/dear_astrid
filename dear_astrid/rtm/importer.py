@@ -103,3 +103,19 @@ class Importer(object):
 
   key    = _rot('key')
   secret = _rot('secret')
+
+class BaseAuth(object):
+  def __init__(self, key, secret, token=None):
+    self.key    = key
+    self.secret = secret
+    self.token  = token
+
+  def api(self, token, test_login=True):
+    # pylint: disable=no-member
+    api = rtm.createRTM(self.key, self.secret, token)
+    if test_login:
+      api.test.login()
+    return api
+
+  def auth(self):
+    return self.api(self.token)
