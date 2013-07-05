@@ -56,13 +56,29 @@ class TestRTMImport(TestCase):
     class AuthError(Exception):
       pass
 
+    # Prepare to test Exceptions raised on login test.
     login = Mock()
     login.test.login.side_effect = AuthError('oops')
     self.mocks['rtm'].return_value = login
 
+    def reset():
+      for mock in (login, self.mocks['rtm']):
+        mock.reset_mock()
+
+    reset()
+
     auth = BaseAuth(1, 2, 3)
     assert_raises(AuthError, auth.auth)
+    self.mocks['rtm'].assert_called_once_with(1, 2, 3)
+    login.assert_has_calls([call.test.login()])
+
+    reset()
+
     assert_raises(AuthError, auth.api)
+    self.mocks['rtm'].assert_called_once_with(1, 2, 3)
+    login.assert_has_calls([call.test.login()])
+
+    reset()
 
     try:
       auth.api(test_login=False)
@@ -70,3 +86,5 @@ class TestRTMImport(TestCase):
       assert False
     else:
       assert True
+
+    assert not login.called
