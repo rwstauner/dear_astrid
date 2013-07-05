@@ -110,8 +110,10 @@ class BaseAuth(object):
     self.secret = secret
     self.token  = token
 
-  def api(self, token, test_login=True):
+  def api(self, token=None, test_login=True):
     # pylint: disable=no-member
+    if token is None:
+      token = self.token
     api = rtm.createRTM(self.key, self.secret, token)
     if test_login:
       api.test.login()
