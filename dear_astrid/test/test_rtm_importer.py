@@ -127,4 +127,7 @@ class TestRTMImport(TestCase):
     assert self.mocks['prompt'].call_count == 1
     assert self.mocks['prompt'].call_args[0][0].startswith('Press Enter')
 
-    # TODO: assert_raises
+    # We should catch RTMAPIError and throw AuthError.
+    CLIAuth.get_token_from_api = Mock()
+    CLIAuth.api = Mock(side_effect=RTMAPIError('oops'))
+    assert_raises(AuthError, CLIAuth(1, 2).auth)
