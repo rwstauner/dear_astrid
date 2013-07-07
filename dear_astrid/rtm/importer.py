@@ -78,7 +78,7 @@ class Importer(object):
     # pylint: disable=no-member
 
     added = self.rtm.tasks.add(timeline=self.timeline,
-      name=task['name'], parse=0)
+      name=task['name'], list_id=self.list_id, parse=0)
 
     args = dict(
       timeline      = self.timeline,
