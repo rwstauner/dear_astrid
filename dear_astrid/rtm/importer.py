@@ -10,7 +10,8 @@ from __future__ import absolute_import
 __docformat__ = 'reStructuredText'
 
 import sys
-if sys.version_info <= (3,):
+PY3K = sys.version_info >= (3,)
+if not PY3K:
   import string
 import time
 import webbrowser
@@ -32,10 +33,11 @@ class _rot(object):
     self.attr  = ' ' + fname
     self.tr = self.maketrans('89abcdef01234567', '0123456789abcdef')
 
-  def maketrans(self, from_, to_):
-    if sys.version_info <= (3,):
+  if not PY3K:
+    def maketrans(self, from_, to_):
       return string.maketrans(from_, to_)
-    else:
+  else:
+    def maketrans(self, from_, to_):
       return str.maketrans(from_, to_)
 
   def __get__(self, obj, cls):

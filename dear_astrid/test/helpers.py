@@ -41,9 +41,9 @@ class timezone(object):
   def __exit__(self, *args):
     self.set_env(self.orig)
 
-PY3 = sys.version_info >= (3,)
+PY3K = sys.version_info >= (3,)
 
 def u(string):
-  if not PY3:
+  if not PY3K:
     string = string.decode('utf-8')
   return string
