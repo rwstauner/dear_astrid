@@ -32,8 +32,11 @@ class _rot(object):
     self.attr  = ' ' + fname
     self.tr = self.maketrans('89abcdef01234567', '0123456789abcdef')
 
-  # 2to3
-  maketrans = string.maketrans if sys.version_info <= (3,) else str.maketrans
+  def maketrans(self, from_, to_):
+    if sys.version_info <= (3,):
+      return string.maketrans(from_, to_)
+    else:
+      return str.maketrans(from_, to_)
 
   def __get__(self, obj, cls):
     return getattr(obj, self.attr).translate(self.tr)
