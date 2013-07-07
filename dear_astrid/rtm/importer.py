@@ -95,6 +95,7 @@ class Importer(object):
       self.rtm.tasks.setDueDate(due=task['due_date'],
         # TODO: Can we determine has_due_time?
         has_due_time=1,
+        # We're using iso8601 so we don't need them to be specially parsed.
         parse=0,
         **args)
 
