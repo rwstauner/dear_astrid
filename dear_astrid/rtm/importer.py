@@ -41,10 +41,14 @@ class _rot(object):
     setattr(obj, self.attr, val)
 
 class Importer(object):
-  def __init__(self):
+  def __init__(self, auth=None):
     self._rtm  = None
     self.timeline = None
     self.list_id  = None
+    if auth is not None:
+      self.auth = auth
+    else:
+      self.auth = CLIAuth
 
     # Please obtain your own api key/secret (it's easy!) rather than using
     # these in another app: https://www.rememberthemilk.com/services/api/
@@ -53,6 +57,8 @@ class Importer(object):
 
   @_slow
   def rtm(self):
+    if not self._rtm:
+      self._rtm = self.auth(self.key, self.secret).auth()
     return self._rtm
 
   def import_tasks(self, tasks):

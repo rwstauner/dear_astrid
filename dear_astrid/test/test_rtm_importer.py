@@ -125,3 +125,6 @@ class TestRTMImport(TestCase):
     CLIAuth.get_token_from_api = Mock()
     CLIAuth.api = Mock(side_effect=RTMAPIError('oops'))
     assert_raises(AuthError, CLIAuth(1, 2).auth)
+
+  def test_importer_default_auth(self, *args):
+    assert_equal(Importer().auth, CLIAuth)
