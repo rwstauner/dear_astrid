@@ -128,3 +128,41 @@ class TestRTMImport(TestCase):
 
   def test_importer_default_auth(self, *args):
     assert_equal(Importer().auth, CLIAuth)
+
+  @patch('time.time', return_value=1373131732.100497)
+  def test_importer_preparation(self, *args):
+    # Skip auth logic since it's tested elsewhere
+
+    api  = Mock()
+    auth = Mock()
+    auth.return_value.auth.return_value = api
+
+    api.timelines.create.return_value.timeline = "5 o'clock"
+    api.lists.add.return_value.list.id = 'tuttle'
+
+    taskseries = Mock()
+    taskseries.id = 'toothbrush'
+    taskseries.task.id = 'boom!'
+    api.tasks.add.return_value.list.taskseries = taskseries
+
+    imp = Importer(auth=auth)
+    imp.import_tasks([{'name':"That's a double!"}])
+
+    list_name = 'Dear Astrid 1373131732.100497'
+
+    # The rtm getter should be called twice (which means two sleeps).
+    time.sleep.assert_has_calls([call(1), call(1)])
+
+    imp._rtm.assert_has_calls([
+      # The attributes called on the final object won't show up in this list
+      # (unless we use PropertyMock) but later we test that the value was
+      # received and passed correctly to other methods.
+
+      # import_tasks()
+      call.timelines.create(), # .timeline
+      call.lists.add(timeline="5 o'clock", name=list_name), # .list.id
+
+      # add_task()
+      call.tasks.add(timeline="5 o'clock", list_id='tuttle',
+        name="That's a double!", parse=0),
+    ])
