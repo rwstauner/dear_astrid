@@ -86,33 +86,33 @@ class Importer(object):
     # Should this be setTags?
     self.rtm.tasks.addTags(tags=','.join(task['tags']), **args)
 
-    if task['due_date']:
+    if task.get('due_date', None):
       self.rtm.tasks.setDueDate(due=task['due_date'],
         # TODO: Can we determine has_due_time?
         has_due_time=1,
         parse=0,
         **args)
 
-    if task['estimated']:
+    if task.get('estimated', None):
       self.rtm.tasks.setEstmate(estimate=task['estimate'], **args)
 
-    if task['priority']:
+    if task.get('priority', None):
       self.rtm.tasks.setPriority(priority=task['priority'], **args)
 
-    if task['repeat']:
+    if task.get('repeat', None):
       self.rtm.tasks.setRecurrence(repeat=task['repeat'], **args)
 
-    if task['notes']:
+    if task.get('notes', None):
       for note in task['notes']:
         self.rtm.tasks.notes.add(note_title=note, note_text=note, **args)
 
     # TODO: does Astrid do URLs? rtm.setURL(url=task['url'], **args)
 
     # do the status changes last
-    if task['completed']:
+    if task.get('completed', None):
       self.rtm.tasks.complete(**args)
 
-    if task['deleted']:
+    if task.get('deleted', None):
       self.rtm.tasks.delete(**args)
 
     return added
