@@ -87,8 +87,9 @@ class Importer(object):
       task_id       = added.list.taskseries.task.id,
     )
 
-    # Should this be setTags?
-    self.rtm.tasks.addTags(tags=','.join(task['tags']), **args)
+    if task.get('tags', None):
+      # Should this be setTags?
+      self.rtm.tasks.addTags(tags=','.join(task['tags']), **args)
 
     if task.get('due_date', None):
       self.rtm.tasks.setDueDate(due=task['due_date'],
