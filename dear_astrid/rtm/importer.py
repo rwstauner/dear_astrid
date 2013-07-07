@@ -63,8 +63,12 @@ class Importer(object):
 
   def import_tasks(self, tasks):
     self.timeline = self.rtm.timelines.create().timeline
+
+    # TODO: make list name customizable?
+    list_name = 'Dear Astrid {0:f}'.format(time.time())
+
     self.list_id  = self.rtm.lists.add(timeline=self.timeline,
-      name='Dear Astrid ' + time.time()).list.id
+      name=list_name).list.id
 
     for task in tasks:
       self.add_task(task)
