@@ -131,6 +131,28 @@ def test_parse_xml():
     }
   )
 
+  assert_equal(
+    one_task(
+      '''
+  <task attachments_pushed_at="0" calendarUri="" classification="" completed="1373263304672" created="1373263156134" creatorId="0" deleted="1373263316297" detailsDate="0" dueDate="0" elapsedSeconds="5100" estimatedSeconds="6900" flags="0" hideUntil="0" historyFetch="0" historyHasMore="0" importance="2" is_public="0" is_readonly="0" lastSync="0" modified="1373263316297" notes="Enough said" postponeCount="0" pushedAt="0" recurrence="" notificationFlags="6" lastNotified="0" notifications="1209600000" snoozeTime="0" repeatUntil="0" socialReminder="unseen" timerStart="0" title="Completed and deleted" user="" activities_pushed_at="0" userId="0" remoteId="4407620889991601387">
+    <metadata created="1373263296778" deleted="0" key="alarm" value="1373263272089" value2="1" />
+  </task>
+      '''
+    ),
+    {
+      'title':        u('Completed and deleted'),
+      'priority':     2,
+      'due_date':     None,
+      'recurrence':   None,
+      'repeat_until': None,
+      'completed':    dtu(2013,  7,  8,  6,  1, 44, 672000),
+      'deleted':      dtu(2013,  7,  8,  6,  1, 56, 297000),
+      'estimated':    6900,
+      'elapsed':      5100,
+      'notes':        'Enough said',
+      'tags':         ['astrid'],
+    }
+  )
 
 def test_parse_timestamp():
   def t(stamp, exp):

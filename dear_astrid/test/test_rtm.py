@@ -175,6 +175,38 @@ def test_format_task():
     },
   )
 
+  t(
+    {
+      'title':        u('Completed and deleted'),
+      'priority':     2,
+      'due_date':     None,
+      'recurrence':   None,
+      'repeat_until': None,
+      'completed':    dtu(2013,  7,  8,  6,  1, 44, 672000),
+      'deleted':      dtu(2013,  7,  8,  6,  1, 56, 297000),
+      'estimated':    6900,
+      'elapsed':      5100,
+      'notes':        'Enough said',
+      'tags':         ['astrid'],
+    },
+    {
+      'name':         u('Completed and deleted'),
+      'priority':     3,
+      'due_date':     None,
+      'repeat':       None,
+      'completed':    True,
+      'deleted':      True,
+      'estimated':    '115 min',
+      'notes':        'Enough said',
+      'tags':         ['astrid', 'astrid-completed', 'astrid-deleted', 'astrid-notes'],
+      'smart_add':    u(
+        'Completed and deleted'
+        ' !3 #astrid #astrid-completed #astrid-deleted #astrid-notes'
+        ' =115 min'
+      ),
+    },
+  )
+
 def test_format_date():
   def t(dto, exp, tz, loc):
     assert_equal(format_date(dto), exp)
