@@ -1,5 +1,5 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
-# pylint: disable=no-member
+# pylint: disable=no-member,maybe-no-member
 
 from __future__ import absolute_import
 
@@ -9,6 +9,7 @@ from nose.tools import *
 from mock import *
 
 from dear_astrid.rtm.importer import *
+from dear_astrid.test.helpers import *
 
 try:
   raw_input
@@ -166,3 +167,164 @@ class TestRTMImport(TestCase):
       call.tasks.add(timeline="5 o'clock", list_id='tuttle',
         name="That's a double!", parse=0),
     ])
+
+  def assert_add_task_api_calls(self, task, calls, raises=None, no_add=False):
+    args = dict(
+      timeline      = '3 days in tokyo',
+      list_id       = '4077',
+      taskseries_id = 'sniper',
+      task_id       = 'kp',
+    )
+
+    imp = Importer()
+    imp._rtm = Mock()
+    imp.timeline = args['timeline']
+    imp.list_id  = args['list_id']
+
+    taskseries = Mock()
+    taskseries.id      = args['taskseries_id']
+    taskseries.task.id = args['task_id']
+    imp._rtm.tasks.add.return_value.list.taskseries = taskseries
+
+    if raises is not None:
+      assert_raises(raises, lambda: imp.add_task(task))
+    else:
+      imp.add_task(task)
+
+    # Append the args that are always required.
+    for c in calls:
+      c[-1].update(args)
+
+    if not no_add:
+      calls.insert(0, call.tasks.add(timeline=args['timeline'],
+        list_id=args['list_id'], name=task['name'], parse=0))
+
+    imp._rtm.assert_has_calls(calls)
+
+  def test_no_task_name(self, *args):
+    self.assert_add_task_api_calls(task={}, calls=[],
+      raises=KeyError, no_add=True)
+
+  def test_add_tasks(self, *args):
+    self.assert_add_task_api_calls(
+      task={
+        'name':         u('squid'),
+        'priority':     3,
+        'due_date':     '2014-05-10T12:00:00Z',
+        'repeat':       None,
+        'completed':    False,
+        'deleted':      False,
+        'estimated':    None,
+        'tags':         ['astrid'],
+        'notes':        None,
+      },
+      calls=[
+        call.tasks.addTags(tags='astrid'),
+        call.tasks.setDueDate(due='2014-05-10T12:00:00Z',
+          has_due_time=1, parse=0),
+        call.tasks.setPriority(priority=3),
+      ],
+    )
+
+    self.assert_add_task_api_calls(
+      task={
+        'name':         u('repeat and remind'),
+        'priority':     3,
+        'due_date':     '2013-06-04T18:55:01Z',
+        'repeat':       'Every 12 days until 2014-07-19T17:55:01Z',
+        'completed':    False,
+        'deleted':      False,
+        'estimated':    None,
+        'notes':        u("First note\nHere"),
+        'tags':         ['astrid', u('section 8'), u('Hard cheese'), 'astrid-notes'],
+        'smart_add':    'should be ignored',
+      },
+      calls=[
+        call.tasks.addTags(tags='astrid,section 8,Hard cheese,astrid-notes'),
+        call.tasks.setDueDate(due='2013-06-04T18:55:01Z',
+          has_due_time=1, parse=0),
+        call.tasks.setPriority(priority=3),
+        call.tasks.setRecurrence(
+          repeat='Every 12 days until 2014-07-19T17:55:01Z'),
+        call.tasks.notes.add(note_title=u("First note\nHere"),
+          note_text=u("First note\nHere")),
+      ],
+    )
+
+    self.assert_add_task_api_calls(
+      task={
+        'name':         u('Completed no priority'),
+        'priority':     4,
+        'completed':    True,
+        'deleted':      False,
+        'tags':         ['astrid', 'astrid-completed'],
+      },
+      calls=[
+        call.tasks.addTags(tags='astrid,astrid-completed'),
+        call.tasks.setPriority(priority=4),
+        call.tasks.complete(),
+      ],
+    )
+
+    self.assert_add_task_api_calls(
+      task={
+        'name':         u('Really important'),
+        'priority':     1,
+        'due_date':     None,
+        'repeat':       None,
+        'completed':    False,
+        'deleted':      False,
+        'estimated':    None,
+        'notes':        u('No, really'),
+        'tags':         ['astrid', u('section 8'), 'nifty', 'astrid-notes'],
+      },
+      calls=[
+        call.tasks.addTags(tags='astrid,section 8,nifty,astrid-notes'),
+        call.tasks.setPriority(priority=1),
+        call.tasks.notes.add(note_title=u('No, really'),
+          note_text=u('No, really')),
+      ],
+    )
+
+    self.assert_add_task_api_calls(
+      task={
+        'name':         u('Funky ch&rs !n ^title a =b'),
+        'priority':     2,
+        'due_date':     None,
+        'repeat':       'Every 3 weeks on Thursday',
+        'completed':    False,
+        'deleted':      False,
+        'estimated':    '135 min',
+        'notes':        None,
+        'tags':         ['astrid', 'Hard cheese'],
+      },
+      calls=[
+        call.tasks.addTags(tags='astrid,Hard cheese'),
+        call.tasks.setEstimate(estimate='135 min'),
+        call.tasks.setPriority(priority=2),
+        call.tasks.setRecurrence(repeat='Every 3 weeks on Thursday'),
+      ],
+    )
+
+    self.assert_add_task_api_calls(
+      task={
+      'name':         u('Completed and deleted'),
+      'priority':     3,
+      'due_date':     None,
+      'repeat':       None,
+      'completed':    True,
+      'deleted':      True,
+      'estimated':    '115 min',
+      'notes':        'Enough said',
+      'tags':         ['astrid', 'astrid-completed', 'astrid-deleted', 'astrid-notes'],
+      },
+      calls=[
+        call.tasks.addTags(tags='astrid,astrid-completed,astrid-deleted,astrid-notes'),
+        call.tasks.setEstimate(estimate='115 min'),
+        call.tasks.setPriority(priority=3),
+        call.tasks.notes.add(note_title='Enough said',
+          note_text='Enough said'),
+        call.tasks.complete(),
+        call.tasks.delete(),
+      ],
+    )
