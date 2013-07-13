@@ -105,7 +105,7 @@ class Importer(object):
         **args)
 
     if task.get('estimated', None):
-      self.rtm.tasks.setEstmate(estimate=task['estimate'], **args)
+      self.rtm.tasks.setEstimate(estimate=task['estimated'], **args)
 
     if task.get('priority', None):
       self.rtm.tasks.setPriority(priority=task['priority'], **args)
