@@ -308,15 +308,15 @@ class TestRTMImport(TestCase):
 
     self.assert_add_task_api_calls(
       task={
-      'name':         u('Completed and deleted'),
-      'priority':     3,
-      'due_date':     None,
-      'repeat':       None,
-      'completed':    True,
-      'deleted':      True,
-      'estimated':    '115 min',
-      'notes':        'Enough said',
-      'tags':         ['astrid', 'astrid-completed', 'astrid-deleted', 'astrid-notes'],
+        'name':         u('Completed and deleted'),
+        'priority':     3,
+        'due_date':     None,
+        'repeat':       None,
+        'completed':    True,
+        'deleted':      True,
+        'estimated':    '115 min',
+        'notes':        'Enough said',
+        'tags':         ['astrid', 'astrid-completed', 'astrid-deleted', 'astrid-notes'],
       },
       calls=[
         call.tasks.addTags(tags='astrid,astrid-completed,astrid-deleted,astrid-notes'),
@@ -331,8 +331,8 @@ class TestRTMImport(TestCase):
 
     self.assert_add_task_api_calls(
       task={
-      'name':         'empty list of notes',
-      'notes':        [],
+        'name':         'empty list of notes',
+        'notes':        [],
       },
       calls=[
       ],
@@ -340,8 +340,8 @@ class TestRTMImport(TestCase):
 
     self.assert_add_task_api_calls(
       task={
-      'name':         'multiple notes',
-      'notes':        ['text', 'stuff'],
+        'name':         'multiple notes',
+        'notes':        ['text', 'stuff'],
       },
       calls=[
         call.tasks.notes.add(note_title='text', note_text='text'),
