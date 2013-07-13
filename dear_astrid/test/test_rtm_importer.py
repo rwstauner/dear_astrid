@@ -328,3 +328,23 @@ class TestRTMImport(TestCase):
         call.tasks.delete(),
       ],
     )
+
+    self.assert_add_task_api_calls(
+      task={
+      'name':         'empty list of notes',
+      'notes':        [],
+      },
+      calls=[
+      ],
+    )
+
+    self.assert_add_task_api_calls(
+      task={
+      'name':         'multiple notes',
+      'notes':        ['text', 'stuff'],
+      },
+      calls=[
+        call.tasks.notes.add(note_title='text', note_text='text'),
+        call.tasks.notes.add(note_title='stuff', note_text='stuff'),
+      ],
+    )
