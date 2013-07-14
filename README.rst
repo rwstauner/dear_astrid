@@ -13,11 +13,13 @@ Dear Astrid,
 | your nagging voice,
 | and your persistence in keeping me on track.
 |
-| But now you've given yourself over to some yahoos,
+| But now you've `given yourself over to some yahoos`__,
 | and I can't bear to see what will become of you.
 |
 | So, my precious little squid,
 | I'm leaving you for `a monkey named Bob <http://rememberthemilk.com>`_.
+
+__ http://blog.astrid.com/blog/2013/05/01/yahoo-acquires-astrid/
 
 ----
 
