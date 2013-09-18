@@ -151,7 +151,7 @@ class BaseAuth(object):
 
   def get(self, var):
     """Get auth value from env."""
-    return os.getenv('ASTRID_RTM_{}'.format(var.upper()))
+    return os.getenv('ASTRID_RTM_{0}'.format(var.upper()))
 
   def api(self, token=None, test_login=True):
     # pylint: disable=no-member
