@@ -3,6 +3,7 @@
 
 from __future__ import absolute_import
 
+import os
 import time
 from unittest import TestCase
 
@@ -56,18 +57,28 @@ class TestRTMImport(TestCase):
     assert imp.secret == '56253667'
 
   def test_base_auth(self, *args):
-    api = BaseAuth('k', 's', 't').auth()
-    rtm.createRTM.assert_called_once_with('k', 's', 't')
-    api.test.login.assert_called_once_with()
-
-    # Prepare to test Exceptions raised on login test.
     login = Mock()
-    login.test.login.side_effect = AuthError('oops')
-    rtm.createRTM.return_value = login
 
     def reset():
       for mock in (login, rtm.createRTM):
         mock.reset_mock()
+
+    api = BaseAuth('k', 's', 't').auth()
+    rtm.createRTM.assert_called_once_with('k', 's', 't')
+    api.test.login.assert_called_once_with()
+
+    reset()
+
+    for var in ('key', 'secret', 'token'):
+      os.environ['ASTRID_RTM_%s' % var.upper()] = 'e %s' % var[0:1]
+
+    api = BaseAuth().auth()
+    rtm.createRTM.assert_called_once_with('e k', 'e s', 'e t')
+    api.test.login.assert_called_once_with()
+
+    # Prepare to test Exceptions raised on login test.
+    login.test.login.side_effect = AuthError('oops')
+    rtm.createRTM.return_value = login
 
     reset()
 
@@ -131,7 +142,7 @@ class TestRTMImport(TestCase):
     assert_raises(AuthError, CLIAuth(1, 2).auth)
 
   def test_importer_default_auth(self, *args):
-    assert_equal(Importer().auth, CLIAuth)
+    assert_equal(Importer().auth, BaseAuth)
 
   @patch('time.time', return_value=1373131732.100497)
   def test_importer_preparation(self, *args):

@@ -9,6 +9,7 @@ from __future__ import absolute_import
 
 __docformat__ = 'reStructuredText'
 
+import os
 import sys
 PY3K = sys.version_info >= (3,)
 if not PY3K:
@@ -53,7 +54,7 @@ class Importer(object):
     if auth is not None:
       self.auth = auth
     else:
-      self.auth = CLIAuth
+      self.auth = BaseAuth
 
     # Please obtain your own api key/secret (it's easy!) rather than using
     # these in another app: https://www.rememberthemilk.com/services/api/
@@ -135,15 +136,23 @@ class Importer(object):
   key    = _rot('key')
   secret = _rot('secret')
 
+
 RTMAPIError = rtm.rtm.RTMAPIError
 class AuthError(RTMAPIError):
   pass
 
+
 class BaseAuth(object):
-  def __init__(self, key, secret, token=None):
-    self.key    = key
-    self.secret = secret
-    self.token  = token
+  "Base class for Authorization.  Gets values from ENV."
+
+  def __init__(self, key=None, secret=None, token=None):
+    self.key    = key    or self.get('key')
+    self.secret = secret or self.get('secret')
+    self.token  = token  or self.get('token')
+
+  def get(self, var):
+    """Get auth value from env."""
+    return os.getenv('ASTRID_RTM_{}'.format(var.upper()))
 
   def api(self, token=None, test_login=True):
     # pylint: disable=no-member
