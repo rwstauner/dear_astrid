@@ -56,54 +56,6 @@ class TestRTMImport(TestCase):
     imp.secret = 'deadbeef'
     assert imp.secret == '56253667'
 
-  def test_base_auth(self, *args):
-    login = Mock()
-
-    def reset():
-      for mock in (login, rtm.createRTM):
-        mock.reset_mock()
-
-    api = BaseAuth('k', 's', 't').auth()
-    rtm.createRTM.assert_called_once_with('k', 's', 't')
-    api.test.login.assert_called_once_with()
-
-    reset()
-
-    for var in ('key', 'secret', 'token'):
-      os.environ['ASTRID_RTM_%s' % var.upper()] = 'e %s' % var[0:1]
-
-    api = BaseAuth().auth()
-    rtm.createRTM.assert_called_once_with('e k', 'e s', 'e t')
-    api.test.login.assert_called_once_with()
-
-    # Prepare to test Exceptions raised on login test.
-    login.test.login.side_effect = AuthError('oops')
-    rtm.createRTM.return_value = login
-
-    reset()
-
-    auth = BaseAuth(1, 2, 3)
-    assert_raises(AuthError, auth.auth)
-    rtm.createRTM.assert_called_once_with(1, 2, 3)
-    login.assert_has_calls([call.test.login()])
-
-    reset()
-
-    assert_raises(AuthError, auth.api)
-    rtm.createRTM.assert_called_once_with(1, 2, 3)
-    login.assert_has_calls([call.test.login()])
-
-    reset()
-
-    try:
-      auth.api(test_login=False)
-    except AuthError:
-      assert False
-    else:
-      assert True
-
-    assert not login.called
-
   def test_cli_auth(self, *args):
     url = 'jelly://bean'
     token = 'cookies'
@@ -362,3 +314,71 @@ class TestRTMImport(TestCase):
         call.tasks.notes.add(note_title='stuff', note_text='stuff'),
       ],
     )
+
+@patch('rtm.createRTM')
+class TestBaseAuth(TestCase):
+
+  def setUp(self):
+    self.env_vars = ['ASTRID_RTM_%s' % var.upper() for var in ('key', 'secret', 'token')]
+    for var in self.env_vars:
+      os.environ[var] = 'e %s' % var[11:13].lower()
+
+  def tearDown(self):
+    for var in self.env_vars:
+      del os.environ[var]
+
+  def test_args(self, *args):
+    api = BaseAuth('k', 's', 't').auth()
+    rtm.createRTM.assert_called_once_with('k', 's', 't')
+    api.test.login.assert_called_once_with()
+
+  def test_env(self, *args):
+    api = BaseAuth().auth()
+    rtm.createRTM.assert_called_once_with('e ke', 'e se', 'e to')
+    api.test.login.assert_called_once_with()
+
+  def test_both(self, *args):
+    api = BaseAuth('k1').auth()
+    rtm.createRTM.assert_called_once_with('k1', 'e se', 'e to')
+    api.test.login.assert_called_once_with()
+
+class TestBaseAuthErrors(TestCase):
+
+  def setUp(self):
+    self.patches = [
+      patch('rtm.createRTM'),
+    ]
+    for patcher in self.patches:
+      patcher.start()
+
+    self.login = Mock()
+    # Prepare to test Exceptions raised on login test.
+    self.login.test.login.side_effect = AuthError('oops')
+    rtm.createRTM.return_value = self.login
+
+  def tearDown(self):
+    for patcher in self.patches:
+      patcher.stop()
+
+  def test_auth(self, *args):
+    auth = BaseAuth(1, 2, 3)
+    assert_raises(AuthError, auth.auth)
+    rtm.createRTM.assert_called_once_with(1, 2, 3)
+    self.login.assert_has_calls([call.test.login()])
+
+  def test_api(self, *args):
+    auth = BaseAuth(1, 2, 3)
+    assert_raises(AuthError, auth.api)
+    rtm.createRTM.assert_called_once_with(1, 2, 3)
+    self.login.assert_has_calls([call.test.login()])
+
+  def test_api_no_login(self, *args):
+    auth = BaseAuth(1, 2, 3)
+    try:
+      auth.api(test_login=False)
+    except AuthError:
+      assert False
+    else:
+      assert True
+
+    assert not self.login.called
