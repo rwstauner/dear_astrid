@@ -15,7 +15,6 @@ PY3K = sys.version_info >= (3,)
 if not PY3K:
   import string
 import time
-import webbrowser
 
 import rtm
 
@@ -165,37 +164,3 @@ class BaseAuth(object):
 
   def auth(self):
     return self.api(self.token)
-
-class CLIAuth(BaseAuth):
-  def prompt(self, text):
-    try:
-      answer = raw_input(text)
-    except NameError:
-      answer = input(text)
-    return answer
-
-  def message(self, *args):
-    for arg in args:
-      print(arg)
-
-  def get_token_from_api(self):
-    # Instantiate api with fake token to get url.
-    api = self.api('dear_astrid', test_login=False)
-    url = api.getAuthURL()
-
-    webbrowser.open(url, True, True)
-    self.message(
-      "You must authorize this app with RTM.",
-      "If a browser does not open visit this URL:",
-      url,
-    )
-    self.prompt('Press Enter after you have authorized this app through RTM.')
-
-    return api.getToken()
-
-  def auth(self):
-    token = self.get_token_from_api()
-    try:
-      return self.api(token)
-    except RTMAPIError:
-      raise AuthError("Failed to authorize app with RTM.")
