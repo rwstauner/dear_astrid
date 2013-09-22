@@ -26,10 +26,10 @@ class CLIHelpers(object):
       answer = input(text)
     return answer
 
-  def message(self, *args):
+  def message(self, *args, **kwargs):
     """Print each argument to STDOUT."""
     for arg in args:
-      print(arg)
+      print(arg, **kwargs)
 
 
 class CLIAuth(BaseAuth, CLIHelpers):
