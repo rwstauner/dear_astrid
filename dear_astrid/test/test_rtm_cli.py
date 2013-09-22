@@ -110,6 +110,51 @@ class TestCLIImporter(TestCase):
     # Ensure parent method is used and sleep is performed for each call.
     time.sleep.assert_has_calls([call(1), call(1), call(1)])
 
+
+  def capture_import_tasks(self, tasks, prompt=None):
+    self.imp.prompt.return_value = prompt
+    # Mock the superclass method to test if it gets called.
+    with patch('dear_astrid.rtm.cli.Importer.import_tasks') as patched:
+      self.imp.import_tasks(tasks)
+      return patched
+
+
+  def test_import_tasks_cancel(self, *args):
+    self.capture_import_tasks([{'hi': 'there'}], prompt=':-P') \
+      .assert_has_calls([])
+
+    self.imp.message.assert_has_calls([ call(' (unknown)') ])
+
+  def test_import_tasks_confirm(self, *args):
+    self.capture_import_tasks([{'name': '50'}], prompt='y') \
+      .assert_has_calls([call([{'name': '50'}])])
+
+    self.imp.message.assert_has_calls([ call(' 50') ])
+
+  def test_import_tasks(self, *args):
+    tasks = [
+      {'name': 'mine field'},
+      {'smart_add': 'downtown berlin #go', 'name': 'berlin', 'tags': ['go']},
+    ]
+    self.imp.import_tasks(tasks)
+
+    self.imp.message.assert_has_calls([
+      # Confirm tasks.
+      call(' mine field'),
+      call(' downtown berlin #go'),
+      # Show initial api calls.
+      call('.', end=''),
+      call('.', end=''),
+      # Add tasks.
+      call('Adding: mine field', end=''),
+      call('.', end=''),
+      call(''),
+      call('Adding: downtown berlin #go', end=''),
+      call('.', end=''),
+      call('.', end=''), # tags
+      call(''),
+    ])
+
   def test_add_task(self, *args):
     with patch('dear_astrid.rtm.cli.Importer.add_task') as add_task_patch:
       self.imp.add_task({'name': 'mail a bear'})

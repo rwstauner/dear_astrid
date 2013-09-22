@@ -90,6 +90,18 @@ class CLIImporter(Importer, CLIHelpers):
       **kwargs
     )
 
+  def import_tasks(self, tasks):
+    """Confirm task list before importing."""
+
+    for task in tasks:
+      self.display_task(task, spec=' {0}')
+
+    cont = self.prompt('Import tasks? (y/n):')
+    if not cont.lower().startswith('y'):
+      return
+
+    super(CLIImporter, self).import_tasks(tasks)
+
   def add_task(self, task):
     """Print description of task before adding and show progress indicator."""
 
