@@ -18,6 +18,13 @@ import time
 
 import rtm
 
+__all__ = [
+  'Importer',
+  'BaseAuth',
+  'AuthError',
+  'RTMAPIError',
+]
+
 class _slow(object):
   def __init__(self, fget):
     self.fget  = fget

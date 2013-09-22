@@ -10,6 +10,12 @@ import webbrowser
 
 from dear_astrid.rtm.importer import *
 
+__all__ = [
+  'RTMAPIError',
+  'AuthError',
+  'CLIAuth',
+  'CLIImporter',
+]
 
 # TODO: Is there a better way to share class methods than multiple inheritance?
 class CLIHelpers(object):
