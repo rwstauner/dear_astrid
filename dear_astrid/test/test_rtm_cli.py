@@ -3,12 +3,13 @@
 
 from __future__ import absolute_import
 
+import time
 from unittest import TestCase
+import webbrowser
 
 from nose.tools import *
 from mock import *
 import rtm
-import webbrowser
 
 from dear_astrid.rtm.cli      import *
 
@@ -24,7 +25,7 @@ INPUT_MOCK = MagicMock()
 @patch('rtm.createRTM')
 @patch('webbrowser.open')
 @patch(INPUT_FUNC, new=INPUT_MOCK)
-class TestRTMCLI(TestCase):
+class TestCLIAuth(TestCase):
   def test_cli_auth(self, *args):
     url = 'jelly://bean'
     token = 'cookies'
