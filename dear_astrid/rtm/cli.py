@@ -74,3 +74,28 @@ class CLIAuth(BaseAuth, CLIHelpers):
       return self.api(token)
     except RTMAPIError:
       raise AuthError("Failed to authorize app with RTM.")
+
+
+class CLIImporter(Importer, CLIHelpers):
+
+  """Import astrid backup xml into RTM on the command line."""
+
+  def __init__(self, auth=CLIAuth):
+    super(CLIImporter, self).__init__(auth=auth)
+
+  def display_task(self, task, spec='{0}', **kwargs):
+    """Print description of task using SmartAdd property or task name."""
+    self.message(
+      spec.format(task.get('smart_add', task.get('name', '(unknown)'))),
+      **kwargs
+    )
+
+  def add_task(self, task):
+    """Print description of task before adding and show progress indicator."""
+
+    self.display_task(task, spec='Adding: {0}', end='')
+
+    super(CLIImporter, self).add_task(task)
+
+    # Append newline.
+    self.message('')

@@ -61,3 +61,42 @@ class TestRTMCLI(TestCase):
     CLIAuth.get_token_from_api = Mock()
     CLIAuth.api = Mock(side_effect=RTMAPIError('oops'))
     assert_raises(AuthError, CLIAuth(1, 2).auth)
+
+@patch('time.sleep')
+@patch('rtm.createRTM')
+@patch(INPUT_FUNC, new=INPUT_MOCK)
+class TestCLIImporter(TestCase):
+
+  def setUp(self):
+    self.imp = CLIImporter()
+    self.imp.message = Mock()
+    self.imp.prompt  = Mock()
+    self.imp._rtm    = Mock()
+
+  def test_default_auth(self, *args):
+    assert_true(self.imp.auth, CLIAuth)
+
+  def test_display_task_smart_add(self, *args):
+    self.imp.display_task({'smart_add': 'smarty pants'})
+    self.imp.message.called_once_with('smarty pants')
+
+  def test_display_task_name(self, *args):
+    self.imp.display_task({'name': 'namey pants'})
+    self.imp.message.called_once_with('namey pants')
+
+  def test_display_task_format(self, *args):
+    self.imp.display_task({'name': 'namey pants'}, format=' <={0}=> ')
+    self.imp.message.called_once_with(' <=namey pants=> ')
+
+  def test_add_task(self, *args):
+    with patch('dear_astrid.rtm.cli.Importer.add_task') as add_task_patch:
+      self.imp.add_task({'name': 'mail a bear'})
+      self.imp.message.assert_has_calls([
+        call('Adding: mail a bear', end=''),
+        call(''),
+      ])
+      # Assert dispatch to parent method.
+      add_task_patch.assert_has_calls([
+        call({'name': 'mail a bear'}),
+      ])
+
