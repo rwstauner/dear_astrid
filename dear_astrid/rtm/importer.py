@@ -46,6 +46,9 @@ class _rot(object):
     setattr(obj, self.attr, val)
 
 class Importer(object):
+
+  """Import Astrid tasks into RTM."""
+
   def __init__(self, auth=None):
     self._rtm  = None
     self.timeline = None
@@ -62,11 +65,14 @@ class Importer(object):
 
   @_slow
   def rtm(self):
+    """RTM API client (proprty)"""
     if not self._rtm:
       self._rtm = self.auth(self.key, self.secret).auth()
     return self._rtm
 
   def import_tasks(self, tasks):
+    """Create new list and add tasks to it."""
+
     self.timeline = self.rtm.timelines.create().timeline
 
     # TODO: make list name customizable?
@@ -79,6 +85,8 @@ class Importer(object):
       self.add_task(task)
 
   def add_task(self, task):
+    """Call RTM api to add task and set it's preoperties."""
+
     # The pyrtm module is dynamic.
     # pylint: disable=no-member
 
@@ -138,10 +146,12 @@ class Importer(object):
 
 RTMAPIError = rtm.rtm.RTMAPIError
 class AuthError(RTMAPIError):
+  """Represent failure to authenticate as subclass of RTMAPIError."""
   pass
 
 
 class BaseAuth(object):
+
   "Base class for Authorization.  Gets values from ENV."
 
   def __init__(self, key=None, secret=None, token=None):
@@ -151,9 +161,11 @@ class BaseAuth(object):
 
   def get(self, var):
     """Get auth value from env."""
+    # pylint: disable=no-self-use
     return os.getenv('ASTRID_RTM_{0}'.format(var.upper()))
 
   def api(self, token=None, test_login=True):
+    """Create RTM api client and test login."""
     # pylint: disable=no-member
     if token is None:
       token = self.token
@@ -163,4 +175,5 @@ class BaseAuth(object):
     return api
 
   def auth(self):
+    """Authorize against RTM return client object."""
     return self.api(self.token)
