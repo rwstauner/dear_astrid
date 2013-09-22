@@ -88,6 +88,28 @@ class TestCLIImporter(TestCase):
     self.imp.display_task({'name': 'namey pants'}, format=' <={0}=> ')
     self.imp.message.called_once_with(' <=namey pants=> ')
 
+  def test_rtm_progress_indicator(self, *args):
+    self.imp.rtm.remember()
+    self.imp.rtm.the('milk')
+    self.imp.rtm.bob.t.monkey()
+
+    # Print a dot for each api call.
+    self.imp.message.assert_has_calls([
+      call('.', end=''),
+      call('.', end=''),
+      call('.', end=''),
+    ])
+
+    # Sanity check (what we just called is all that has been called.
+    self.imp._rtm.assert_has_calls([
+      call.remember(),
+      call.the('milk'),
+      call.bob.t.monkey(),
+    ])
+
+    # Ensure parent method is used and sleep is performed for each call.
+    time.sleep.assert_has_calls([call(1), call(1), call(1)])
+
   def test_add_task(self, *args):
     with patch('dear_astrid.rtm.cli.Importer.add_task') as add_task_patch:
       self.imp.add_task({'name': 'mail a bear'})
@@ -100,3 +122,20 @@ class TestCLIImporter(TestCase):
         call({'name': 'mail a bear'}),
       ])
 
+  def test_add_task_progress_indicator(self, *args):
+    self.imp.add_task({
+      'smart_add': 'read how to',
+      'name':      'mail a bear',
+      'tags':      ['astrid', 'mechanics'],
+      'notes':     ['bored', 'bored bored'], # 2 calls
+      'priority':  1,
+    })
+
+    time.sleep.assert_has_calls(
+      [call(1) for i in range(5)]
+    )
+    self.imp.message.assert_has_calls(
+      [call('Adding: read how to', end='')] +
+      [call('.', end='') for i in range(5)] +
+      [call('')]
+    )

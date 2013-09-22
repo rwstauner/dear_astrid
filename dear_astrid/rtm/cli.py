@@ -99,3 +99,9 @@ class CLIImporter(Importer, CLIHelpers):
 
     # Append newline.
     self.message('')
+
+  @property
+  def rtm(self):
+    # self.before_rtm ?
+    self.message('.', end='')
+    return super(CLIImporter, self).rtm
