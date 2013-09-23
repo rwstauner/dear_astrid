@@ -57,6 +57,7 @@ class Importer(object):
   """Import Astrid tasks into RTM."""
 
   def __init__(self, auth=None):
+    #self.transactions = []
     self._rtm  = None
     self.timeline = None
     self.list_id  = None
@@ -99,6 +100,10 @@ class Importer(object):
 
     added = self.rtm.tasks.add(timeline=self.timeline,
       name=task['name'], list_id=self.list_id, parse=0)
+
+    # TODO: record undoable transactions and undo them upon kb interrupt
+    #if added.transaction.undoable == "1":
+      #self.transactions.append(added.transaction.id)
 
     args = dict(
       timeline      = self.timeline,
