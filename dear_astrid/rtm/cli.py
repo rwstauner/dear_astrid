@@ -86,8 +86,7 @@ class CLIImporter(Importer, CLIHelpers):
 
   """Import astrid backup xml into RTM on the command line."""
 
-  def __init__(self, auth=CLIAuth):
-    super(CLIImporter, self).__init__(auth=auth)
+  default_auth = CLIAuth
 
   def display_task(self, task, spec='{0}', **kwargs):
     """Print description of task using SmartAdd property or task name."""

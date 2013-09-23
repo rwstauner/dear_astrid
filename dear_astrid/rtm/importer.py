@@ -49,12 +49,51 @@ class _rot(object):
 
   def __get__(self, obj, cls):
     return getattr(obj, self.attr).translate(self.tr)
+
   def __set__(self, obj, val):
     setattr(obj, self.attr, val)
+
+
+RTMAPIError = rtm.rtm.RTMAPIError
+class AuthError(RTMAPIError):
+  """Represent failure to authenticate as subclass of RTMAPIError."""
+  pass
+
+
+class BaseAuth(object):
+
+  "Base class for Authorization.  Gets values from ENV."
+
+  def __init__(self, key=None, secret=None, token=None):
+    self.key    = key    or self.get('key')
+    self.secret = secret or self.get('secret')
+    self.token  = token  or self.get('token')
+
+  def get(self, var):
+    """Get auth value from env."""
+    # pylint: disable=no-self-use
+    return os.getenv('ASTRID_RTM_{0}'.format(var.upper()))
+
+  def api(self, token=None, test_login=True):
+    """Create RTM api client and test login."""
+    # pylint: disable=no-member
+    if token is None:
+      token = self.token
+    api = rtm.createRTM(self.key, self.secret, token)
+    if test_login:
+      api.test.login()
+    return api
+
+  def auth(self):
+    """Authorize against RTM return client object."""
+    return self.api(self.token)
+
 
 class Importer(object):
 
   """Import Astrid tasks into RTM."""
+
+  default_auth = BaseAuth
 
   def __init__(self, auth=None):
     #self.transactions = []
@@ -64,7 +103,7 @@ class Importer(object):
     if auth is not None:
       self.auth = auth
     else:
-      self.auth = BaseAuth
+      self.auth = self.default_auth
 
     # Please obtain your own api key/secret (it's easy!) rather than using
     # these in another app: https://www.rememberthemilk.com/services/api/
@@ -154,38 +193,3 @@ class Importer(object):
 
   key    = _rot('key')
   secret = _rot('secret')
-
-
-RTMAPIError = rtm.rtm.RTMAPIError
-class AuthError(RTMAPIError):
-  """Represent failure to authenticate as subclass of RTMAPIError."""
-  pass
-
-
-class BaseAuth(object):
-
-  "Base class for Authorization.  Gets values from ENV."
-
-  def __init__(self, key=None, secret=None, token=None):
-    self.key    = key    or self.get('key')
-    self.secret = secret or self.get('secret')
-    self.token  = token  or self.get('token')
-
-  def get(self, var):
-    """Get auth value from env."""
-    # pylint: disable=no-self-use
-    return os.getenv('ASTRID_RTM_{0}'.format(var.upper()))
-
-  def api(self, token=None, test_login=True):
-    """Create RTM api client and test login."""
-    # pylint: disable=no-member
-    if token is None:
-      token = self.token
-    api = rtm.createRTM(self.key, self.secret, token)
-    if test_login:
-      api.test.login()
-    return api
-
-  def auth(self):
-    """Authorize against RTM return client object."""
-    return self.api(self.token)
