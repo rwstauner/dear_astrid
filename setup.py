@@ -1,4 +1,5 @@
-# TODO: use distribute
+# pylint: disable=invalid-name,missing-docstring
+
 from setuptools import setup, find_packages
 
 try:
@@ -20,13 +21,25 @@ setup(
   author='Randy Stauner',
   author_email='randy@magnificent-tears.com',
 
-  packages=find_packages(),
-  #scripts=['bin/dear_astrid.py'],
-
   url='http://github.com/rwstauner/dear_astrid/',
-  license='MIT',
   description='Migrate tasks from Astrid backup xml',
   long_description=open('README.rst').read(),
+
+  classifiers=[
+    'Development Status :: 4 - Beta',
+    'Environment :: Console',
+    'Intended Audience :: End Users/Desktop',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Topic :: Text Processing',
+    'Topic :: Utilities',
+  ],
+  license='MIT',
+  #platforms=
+
+  packages=find_packages(),
+  #scripts=['bin/dear_astrid.py'],
 
   install_requires=[
     'pyrtm>=0.4.1',
