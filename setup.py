@@ -10,9 +10,17 @@ try:
 except ImportError:
   extra_args = dict()
 
-# TODO: would this work? (is the file included in the dist?)
-#tests_require = [l.strip() for l in open('test-requirements.txt').readlines()]
-tests_require = ['mock']
+def lines(f):
+  return [l.strip() for l in open(f).readlines()]
+
+def reqs(f):
+  # TODO: strip whitespace and parenthesize req versions?
+  return lines(f)
+
+tests_require = [
+  # Don't require coverage for dist installation.
+  r for r in reqs('test-requirements.txt') if "coverage" not in r
+]
 
 setup(
   name='dear_astrid',
@@ -41,9 +49,7 @@ setup(
   packages=find_packages(),
   #scripts=['bin/dear_astrid.py'],
 
-  install_requires=[
-    'pyrtm>=0.4.1',
-  ],
+  install_requires=reqs('requirements.txt'),
 
   setup_requires=['nose>=1.0'],
 
