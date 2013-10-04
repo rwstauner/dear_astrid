@@ -75,12 +75,12 @@ def smart_add(
 
   ::
 
-    >>> smart_add(name='big red bird', priority=2, tags=['fuzzy', 'pink-feet'])
-    'big red bird !2 #fuzzy #pink-feet'
+    >>> print(smart_add(name='big red bird', priority=2, tags=['fuzzy', 'pink-feet']))
+    big red bird !2 #fuzzy #pink-feet
 
-    >>> smart_add(name='mail call', tags=['pea shooter'], estimated='60 min',
-    ...   due_date='2012-06-20T22:11:38', repeat='Every 3 days')
-    'mail call ^2012-06-20T22:11:38 #pea shooter *Every 3 days =60 min'
+    >>> print(smart_add(name='mail call', tags=['pea shooter'], estimated='60 min',
+    ...   due_date='2012-06-20T22:11:38', repeat='Every 3 days'))
+    mail call ^2012-06-20T22:11:38 #pea shooter *Every 3 days =60 min
 
   """
 
@@ -136,8 +136,8 @@ def format_estimate(seconds):
 
   ::
 
-    >>> format_estimate(3600)
-    '60 min'
+    >>> print(format_estimate(3600))
+    60 min
 
   """
 
@@ -183,13 +183,13 @@ def format_repeat(repeat, until=None, local=False):
 
   ::
 
-    >>> format_repeat({'FREQ': 'MONTHLY', 'INTERVAL': 6})
-    'Every 6 months'
+    >>> print(format_repeat({'FREQ': 'MONTHLY', 'INTERVAL': 6}))
+    Every 6 months
 
     >>> import datetime
     >>> repeat_until = datetime.datetime(2013, 6, 1)
-    >>> format_repeat({'FREQ': 'DAILY', 'INTERVAL': 1}, repeat_until)
-    'Every day until 2013-06-01T00:00:00Z'
+    >>> print(format_repeat({'FREQ': 'DAILY', 'INTERVAL': 1}, repeat_until))
+    Every day until 2013-06-01T00:00:00Z
 
   """
 
