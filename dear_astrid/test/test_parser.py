@@ -24,7 +24,7 @@ def test_parse_xml():
       '''
     ),
     {
-      'title':        u('squid'),
+      'title':        'squid',
       'priority':     2,
       'due_date':     dtu(2014,  5, 10, 19,  0,  0, 402000),
       'recurrence':   None,
@@ -49,17 +49,17 @@ def test_parse_xml():
       '''
     ),
     {
-      'title':        u('repeat and remind'),
+      'title':        'repeat and remind',
       'priority':     2,
       'due_date':     dtu(2013,  6,  5,  1, 55,  1),
-      'recurrence':   {u('FREQ'): u('DAILY'), u('INTERVAL'): 12},
+      'recurrence':   {'FREQ': 'DAILY', 'INTERVAL': 12},
       'repeat_until': dtu(2014,  7, 20,  0, 55,  1),
       'completed':    None,
       'deleted':      None,
       'estimated':    0,
       'elapsed':      0,
-      'notes':        u("First note\nHere"),
-      'tags':         ['astrid', u('section 8'), u('Hard cheese')],
+      'notes':        "First note\nHere",
+      'tags':         ['astrid', 'section 8', 'Hard cheese'],
     }
   )
 
@@ -70,7 +70,7 @@ def test_parse_xml():
       '''
     ),
     {
-      'title':        u('Completed no priority'),
+      'title':        'Completed no priority',
       'priority':     3,
       'due_date':     None,
       'recurrence':   None,
@@ -94,7 +94,7 @@ def test_parse_xml():
       '''
     ),
     {
-      'title':        u('Really important'),
+      'title':        'Really important',
       'priority':     0,
       'due_date':     None,
       'recurrence':   None,
@@ -103,8 +103,8 @@ def test_parse_xml():
       'deleted':      None,
       'estimated':    0,
       'elapsed':      0,
-      'notes':        u('No, really'),
-      'tags':         ['astrid', u('section 8'), 'nifty'],
+      'notes':        'No, really',
+      'tags':         ['astrid', 'section 8', 'nifty'],
     }
   )
 
@@ -117,10 +117,10 @@ def test_parse_xml():
       '''
     ),
     {
-      'title':        u('Funky ch&rs !n ^title a =b'),
+      'title':        'Funky ch&rs !n ^title a =b',
       'priority':     1,
       'due_date':     None,
-      'recurrence':   dict(FREQ=u('WEEKLY'), INTERVAL=3, BYDAY=u('TH')),
+      'recurrence':   dict(FREQ='WEEKLY', INTERVAL=3, BYDAY='TH'),
       'repeat_until': None,
       'completed':    None,
       'deleted':      None,
@@ -140,7 +140,7 @@ def test_parse_xml():
       '''
     ),
     {
-      'title':        u('Completed and deleted'),
+      'title':        'Completed and deleted',
       'priority':     2,
       'due_date':     None,
       'recurrence':   None,

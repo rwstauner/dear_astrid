@@ -1,6 +1,5 @@
 import datetime
 import os
-import sys
 import time
 
 from dear_astrid.constants import *
@@ -10,7 +9,6 @@ from dear_astrid.tzinfo import __all__ as _tzinfo_all
 
 __all__ = [
   'dtu',
-  'u',
   'timezone',
 ] + _constants_all + _tzinfo_all
 
@@ -40,10 +38,3 @@ class timezone(object):
 
   def __exit__(self, *args):
     self.set_env(self.orig)
-
-PY3K = sys.version_info >= (3,)
-
-def u(string):
-  if not PY3K:
-    string = string.decode('utf-8')
-  return string

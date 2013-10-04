@@ -127,7 +127,7 @@ class TestRTMImport(TestCase):
   def test_add_tasks(self, *args):
     self.assert_add_task_api_calls(
       task={
-        'name':         u('squid'),
+        'name':         'squid',
         'priority':     3,
         'due_date':     '2014-05-10T12:00:00Z',
         'repeat':       None,
@@ -147,15 +147,15 @@ class TestRTMImport(TestCase):
 
     self.assert_add_task_api_calls(
       task={
-        'name':         u('repeat and remind'),
+        'name':         'repeat and remind',
         'priority':     3,
         'due_date':     '2013-06-04T18:55:01Z',
         'repeat':       'Every 12 days until 2014-07-19T17:55:01Z',
         'completed':    False,
         'deleted':      False,
         'estimated':    None,
-        'notes':        u("First note\nHere"),
-        'tags':         ['astrid', u('section 8'), u('Hard cheese'), 'astrid-notes'],
+        'notes':        "First note\nHere",
+        'tags':         ['astrid', 'section 8', 'Hard cheese', 'astrid-notes'],
         'smart_add':    'should be ignored',
       },
       calls=[
@@ -165,14 +165,14 @@ class TestRTMImport(TestCase):
         call.tasks.setPriority(priority=3),
         call.tasks.setRecurrence(
           repeat='Every 12 days until 2014-07-19T17:55:01Z'),
-        call.tasks.notes.add(note_title=u("First note\nHere"),
-          note_text=u("First note\nHere")),
+        call.tasks.notes.add(note_title="First note\nHere",
+          note_text="First note\nHere"),
       ],
     )
 
     self.assert_add_task_api_calls(
       task={
-        'name':         u('Completed no priority'),
+        'name':         'Completed no priority',
         'priority':     4,
         'completed':    True,
         'deleted':      False,
@@ -187,27 +187,27 @@ class TestRTMImport(TestCase):
 
     self.assert_add_task_api_calls(
       task={
-        'name':         u('Really important'),
+        'name':         'Really important',
         'priority':     1,
         'due_date':     None,
         'repeat':       None,
         'completed':    False,
         'deleted':      False,
         'estimated':    None,
-        'notes':        u('No, really'),
-        'tags':         ['astrid', u('section 8'), 'nifty', 'astrid-notes'],
+        'notes':        'No, really',
+        'tags':         ['astrid', 'section 8', 'nifty', 'astrid-notes'],
       },
       calls=[
         call.tasks.addTags(tags='astrid,section 8,nifty,astrid-notes'),
         call.tasks.setPriority(priority=1),
-        call.tasks.notes.add(note_title=u('No, really'),
-          note_text=u('No, really')),
+        call.tasks.notes.add(note_title='No, really',
+          note_text='No, really'),
       ],
     )
 
     self.assert_add_task_api_calls(
       task={
-        'name':         u('Funky ch&rs !n ^title a =b'),
+        'name':         'Funky ch&rs !n ^title a =b',
         'priority':     2,
         'due_date':     None,
         'repeat':       'Every 3 weeks on Thursday',
@@ -227,7 +227,7 @@ class TestRTMImport(TestCase):
 
     self.assert_add_task_api_calls(
       task={
-        'name':         u('Completed and deleted'),
+        'name':         'Completed and deleted',
         'priority':     3,
         'due_date':     None,
         'repeat':       None,

@@ -18,7 +18,7 @@ def test_format_task():
 
   t(
     {
-      'title':        u('squid'),
+      'title':        'squid',
       'priority':     2,
       'due_date':     dtu(2014,  5, 10, 12,  0,  0, 402000),
       'recurrence':   None,
@@ -31,7 +31,7 @@ def test_format_task():
       'notes':        None,
     },
     {
-      'name':         u('squid'),
+      'name':         'squid',
       'priority':     3,
       'due_date':     '2014-05-10T12:00:00Z',
       'repeat':       None,
@@ -41,38 +41,36 @@ def test_format_task():
       'tags':         ['astrid'],
       'notes':        None,
       'tz':           'US/Eastern',
-      'smart_add':    u(
-        'squid ^2014-05-10T08:00:00 !3 #astrid'
-      ),
+      'smart_add':    'squid ^2014-05-10T08:00:00 !3 #astrid',
     },
   )
 
   t(
     {
-      'title':        u('repeat and remind'),
+      'title':        'repeat and remind',
       'priority':     2,
       'due_date':     dtu(2013,  6,  4, 18, 55,  1),
-      'recurrence':   {u('FREQ'): u('DAILY'), u('INTERVAL'): 12},
+      'recurrence':   {'FREQ': 'DAILY', 'INTERVAL': 12},
       'repeat_until': dtu(2014,  7, 19, 17, 55,  1),
       'completed':    None,
       'deleted':      None,
       'estimated':    0,
       'elapsed':      0,
-      'notes':        u("First note\nHere"),
-      'tags':         ['astrid', u('section 8'), u('Hard cheese')],
+      'notes':        "First note\nHere",
+      'tags':         ['astrid', 'section 8', 'Hard cheese'],
     },
     {
-      'name':         u('repeat and remind'),
+      'name':         'repeat and remind',
       'priority':     3,
       'due_date':     '2013-06-04T18:55:01Z',
       'repeat':       'Every 12 days until 2014-07-19T17:55:01Z',
       'completed':    False,
       'deleted':      False,
       'estimated':    None,
-      'notes':        u("First note\nHere"),
-      'tags':         ['astrid', u('section 8'), u('Hard cheese'), 'astrid-notes'],
+      'notes':        "First note\nHere",
+      'tags':         ['astrid', 'section 8', 'Hard cheese', 'astrid-notes'],
       'tz':           'America/Phoenix',
-      'smart_add':    u(
+      'smart_add':    (
         'repeat and remind ^2013-06-04T11:55:01'
         ' !3 #astrid #section 8 #Hard cheese #astrid-notes'
         ' *Every 12 days until 2014-07-19T10:55:01'
@@ -82,7 +80,7 @@ def test_format_task():
 
   t(
     {
-      'title':        u('Completed no priority'),
+      'title':        'Completed no priority',
       'priority':     3,
       'due_date':     None,
       'recurrence':   None,
@@ -95,7 +93,7 @@ def test_format_task():
       'tags':         ['astrid'],
     },
     {
-      'name':         u('Completed no priority'),
+      'name':         'Completed no priority',
       'priority':     4,
       'due_date':     None,
       'repeat':       None,
@@ -104,16 +102,13 @@ def test_format_task():
       'estimated':    None,
       'notes':        None,
       'tags':         ['astrid', 'astrid-completed'],
-      'smart_add':    u(
-        'Completed no priority'
-        ' !4 #astrid #astrid-completed'
-      ),
+      'smart_add':    'Completed no priority !4 #astrid #astrid-completed',
     },
   )
 
   t(
     {
-      'title':        u('Really important'),
+      'title':        'Really important',
       'priority':     0,
       'due_date':     None,
       'recurrence':   None,
@@ -122,32 +117,30 @@ def test_format_task():
       'deleted':      None,
       'estimated':    0,
       'elapsed':      0,
-      'notes':        u('No, really'),
-      'tags':         ['astrid', u('section 8'), 'nifty'],
+      'notes':        'No, really',
+      'tags':         ['astrid', 'section 8', 'nifty'],
     },
     {
-      'name':         u('Really important'),
+      'name':         'Really important',
       'priority':     1,
       'due_date':     None,
       'repeat':       None,
       'completed':    False,
       'deleted':      False,
       'estimated':    None,
-      'notes':        u('No, really'),
-      'tags':         ['astrid', u('section 8'), 'nifty', 'astrid-notes'],
-      'smart_add':    u(
-        'Really important'
-        ' !1 #astrid #section 8 #nifty #astrid-notes'
-      ),
+      'notes':        'No, really',
+      'tags':         ['astrid', 'section 8', 'nifty', 'astrid-notes'],
+      'smart_add':
+        'Really important !1 #astrid #section 8 #nifty #astrid-notes',
     },
   )
 
   t(
     {
-      'title':        u('Funky ch&rs !n ^title a =b'),
+      'title':        'Funky ch&rs !n ^title a =b',
       'priority':     1,
       'due_date':     None,
-      'recurrence':   dict(FREQ=u('WEEKLY'), INTERVAL=3, BYDAY=u('TH')),
+      'recurrence':   dict(FREQ='WEEKLY', INTERVAL=3, BYDAY='TH'),
       'repeat_until': None,
       'completed':    None,
       'deleted':      None,
@@ -157,7 +150,7 @@ def test_format_task():
       'tags':         ['astrid', 'Hard cheese'],
     },
     {
-      'name':         u('Funky ch&rs !n ^title a =b'),
+      'name':         'Funky ch&rs !n ^title a =b',
       'priority':     2,
       'due_date':     None,
       'repeat':       'Every 3 weeks on Thursday',
@@ -166,7 +159,7 @@ def test_format_task():
       'estimated':    '135 min',
       'notes':        None,
       'tags':         ['astrid', 'Hard cheese'],
-      'smart_add':    u(
+      'smart_add':    (
         'Funky ch&rs \!n \^title a \=b'
         ' !2 #astrid #Hard cheese'
         ' *Every 3 weeks on Thursday'
@@ -177,7 +170,7 @@ def test_format_task():
 
   t(
     {
-      'title':        u('Completed and deleted'),
+      'title':        'Completed and deleted',
       'priority':     2,
       'due_date':     None,
       'recurrence':   None,
@@ -190,7 +183,7 @@ def test_format_task():
       'tags':         ['astrid'],
     },
     {
-      'name':         u('Completed and deleted'),
+      'name':         'Completed and deleted',
       'priority':     3,
       'due_date':     None,
       'repeat':       None,
@@ -199,7 +192,7 @@ def test_format_task():
       'estimated':    '115 min',
       'notes':        'Enough said',
       'tags':         ['astrid', 'astrid-completed', 'astrid-deleted', 'astrid-notes'],
-      'smart_add':    u(
+      'smart_add':    (
         'Completed and deleted'
         ' !3 #astrid #astrid-completed #astrid-deleted #astrid-notes'
         ' =115 min'
