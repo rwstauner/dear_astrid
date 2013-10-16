@@ -1,6 +1,6 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
 
-from datetime import datetime
+from __future__ import unicode_literals
 
 from nose.tools import *
 

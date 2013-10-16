@@ -1,7 +1,7 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
 # pylint: disable=no-member,maybe-no-member
 
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 
 import time
 from unittest import TestCase
