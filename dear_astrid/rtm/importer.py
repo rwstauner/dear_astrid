@@ -5,7 +5,7 @@ This product uses the Remember The Milk API
 but is not endorsed or certified by Remember The Milk.
 """
 
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 
 __docformat__ = 'reStructuredText'
 
@@ -38,7 +38,8 @@ class _rot(object):
   def __init__(self, fname):
     self.fname = fname
     self.attr  = ' ' + fname
-    self.tr = self.maketrans('89abcdef01234567', '0123456789abcdef')
+    # Cast unicode_literal to str for 3to2.
+    self.tr = self.maketrans(str('89abcdef01234567'), str('0123456789abcdef'))
 
   if not PY3K:
     def maketrans(self, from_, to_):
@@ -51,7 +52,8 @@ class _rot(object):
     return getattr(obj, self.attr).translate(self.tr)
 
   def __set__(self, obj, val):
-    setattr(obj, self.attr, val)
+    # Cast unicode_literal to str for 3to2.
+    setattr(obj, self.attr, str(val))
 
 
 RTMAPIError = rtm.rtm.RTMAPIError
