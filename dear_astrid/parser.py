@@ -2,6 +2,8 @@
 Parse Astrid xml backup file into simple data structures.
 """
 
+from __future__ import unicode_literals
+
 __docformat__ = 'reStructuredText'
 
 from datetime import datetime

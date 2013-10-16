@@ -1,5 +1,7 @@
 """Constants for Astrid task attributes"""
 
+from __future__ import unicode_literals
+
 __all__ = [
   'FREQUENCY_UNITS',
   'RRULE_WEEK_DAYS',
