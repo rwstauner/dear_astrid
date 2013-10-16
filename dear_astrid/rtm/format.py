@@ -2,6 +2,8 @@
 Convert Astrid tasks to RTM tasks.
 """
 
+from __future__ import unicode_literals
+
 __docformat__ = 'reStructuredText'
 
 import re
