@@ -133,7 +133,7 @@ def parse_recurrence(rule):
 
   recur = dict(s.split('=') for s in matched.group(1).split(';'))
 
-  # cast numberic entries for ease of use
+  # Cast numeric entries for ease of use.
   for key in ('INTERVAL',):
     if key in recur:
       recur[key] = int(recur[key])
