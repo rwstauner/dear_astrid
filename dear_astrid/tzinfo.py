@@ -1,3 +1,10 @@
+'''
+Tzinfo classes for UTC and local time.
+'''
+
+# pylint: disable=missing-docstring,unused-argument,invalid-name
+# pylint: disable=no-self-use,super-init-not-called
+
 __all__ = [
   'UTC',
   'LocalTimezone'
@@ -5,7 +12,7 @@ __all__ = [
 
 # from http://docs.python.org/2/library/datetime.html#tzinfo-objects
 
-from datetime import tzinfo, timedelta, datetime
+from datetime import tzinfo, timedelta
 
 ZERO = timedelta(0)
 

@@ -1,4 +1,5 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
+# pylint: disable=undefined-variable,line-too-long,invalid-name
 
 from __future__ import unicode_literals
 

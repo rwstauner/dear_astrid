@@ -2,6 +2,8 @@ import datetime
 import os
 import time
 
+# pylint: disable=wildcard-import,invalid-name
+
 from dear_astrid.constants import *
 from dear_astrid.constants import __all__ as _constants_all
 from dear_astrid.tzinfo import *
@@ -14,6 +16,7 @@ __all__ = [
 
 
 def dtu(*args):
+  """Return datetime object in UTC."""
   args = list(args)
   while len(args) < 7:
     args.append(0)
