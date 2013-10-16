@@ -47,7 +47,7 @@ def parse_xml(xml=None):
 def parse_task(element):
   """Parse task element into a simple dictionaries."""
 
-  # use method object as shortcut
+  # Use method object as shortcut.
   eattr = element.getAttribute
 
   # other fields: timerStart flags is_public hideUntil

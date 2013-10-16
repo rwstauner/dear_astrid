@@ -20,6 +20,7 @@ __all__ = [
 # TODO: Is there a better way to share class methods than multiple inheritance?
 class CLIHelpers(object):
   """Add helper methods for cli input/output to classes."""
+
   # pylint: disable=no-self-use
   def prompt(self, text):
     """Prompt the user for a value."""
@@ -83,7 +84,6 @@ class CLIAuth(BaseAuth, CLIHelpers):
 
 
 class CLIImporter(Importer, CLIHelpers):
-
   """Import astrid backup xml into RTM on the command line."""
 
   default_auth = CLIAuth

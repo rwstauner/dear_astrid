@@ -63,8 +63,7 @@ class AuthError(RTMAPIError):
 
 
 class BaseAuth(object):
-
-  "Base class for Authorization.  Gets values from ENV."
+  """Base class for Authorization.  Gets values from ENV."""
 
   def __init__(self, key=None, secret=None, token=None):
     self.key    = key    or self.get('key')
@@ -81,9 +80,12 @@ class BaseAuth(object):
     # pylint: disable=no-member
     if token is None:
       token = self.token
+
     api = rtm.createRTM(self.key, self.secret, token)
+
     if test_login:
       api.test.login()
+
     return api
 
   def auth(self):
@@ -92,7 +94,6 @@ class BaseAuth(object):
 
 
 class Importer(object):
-
   """Import Astrid tasks into RTM."""
 
   default_auth = BaseAuth

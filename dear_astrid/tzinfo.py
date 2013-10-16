@@ -1,6 +1,6 @@
-'''
+"""
 Tzinfo classes for UTC and local time.
-'''
+"""
 
 # pylint: disable=missing-docstring,unused-argument,invalid-name
 # pylint: disable=no-self-use,super-init-not-called
