@@ -17,11 +17,20 @@ Dear Astrid,
 | and I can't bear to see what will become of you.
 |
 | So, my precious little squid,
-| I'm leaving you for `a monkey named Bob <http://rememberthemilk.com>`_.
+| I'm leaving you for `a monkey named Bob`_.
 
 __ http://blog.astrid.com/blog/2013/05/01/yahoo-acquires-astrid/
 
 ----
 
+This python library parses Astrid_ backup files into simple data structures.
+It can also import them into RTM_.
+
+----
+
 This program is in no way endorsed by or affiliated with Remember the Milk (TM)
 or Astrid ™, Todoroo ™, or Yahoo ™.
+
+.. _astrid: http://astrid.com
+.. _a monkey named bob:
+.. _rtm:    http://rememberthemilk.com
