@@ -24,6 +24,12 @@ def action(func=None, name=None):
 
   return func
 
+@action
+def json(tasks):
+  import dear_astrid.json
+  # TODO: Make kwargs configurable?  Use a separate raw_json action?
+  print dear_astrid.json.dumps(tasks, indent=2)
+
 @action(name='print')
 def print_tasks(tasks):
   for task in tasks:
