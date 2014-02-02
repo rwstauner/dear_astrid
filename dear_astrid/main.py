@@ -2,7 +2,7 @@
 Simple CLI app to parse and convert Astrid backup file.
 """
 
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 
 import argparse
 
@@ -28,7 +28,7 @@ def action(func=None, name=None):
 def json(tasks):
   import dear_astrid.json
   # TODO: Make kwargs configurable?  Use a separate raw_json action?
-  print dear_astrid.json.dumps(tasks, indent=2)
+  print(dear_astrid.json.dumps(tasks, indent=2))
 
 @action(name='print')
 def print_tasks(tasks):
