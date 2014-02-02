@@ -61,5 +61,11 @@ setup(
     'test': tests_require,
   },
 
+  entry_points = {
+    'console_scripts': [
+      'dear_astrid = dear_astrid.main:main'
+    ],
+  },
+
   **extra_args
 )
