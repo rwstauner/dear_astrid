@@ -18,8 +18,9 @@ class TestJSON(TestCase):
     self.assertEqual(self.round_trip(obj), dict(obj.copy(), **exp))
 
   def test_round_trip_helper(self):
-    with self.assertRaises(AssertionError):
-      self.assert_round_trip({'a': True}, {'a': False})
+    # Use silly lambda instead of `with` for python 2.6 compatibility.
+    self.assertRaises(AssertionError,
+      lambda: self.assert_round_trip({'a': True}, {'a': False}))
 
   def test_round_trip_basics(self):
     self.assert_round_trip({
