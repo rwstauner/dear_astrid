@@ -30,6 +30,10 @@ class UTC(tzinfo):
   def dst(self, dt):
     return ZERO
 
+  # Make the test diffs smaller (by not printing the memory address).
+  def __repr__(self):
+    return str(type(self))
+
 # A class capturing the platform's idea of local time.
 
 import time as _time
