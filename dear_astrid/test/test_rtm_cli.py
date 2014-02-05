@@ -1,10 +1,10 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
 # pylint: disable=no-member,maybe-no-member
+# pylint: disable=too-many-public-methods
 
 from __future__ import absolute_import, unicode_literals
 
 import time
-from unittest import TestCase
 import webbrowser
 
 from nose.tools import *
@@ -12,6 +12,7 @@ from mock import *
 import rtm
 
 from dear_astrid.rtm.cli      import *
+from dear_astrid.test.helpers import *
 
 
 try:

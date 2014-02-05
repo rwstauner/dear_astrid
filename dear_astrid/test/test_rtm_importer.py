@@ -5,7 +5,6 @@ from __future__ import absolute_import, unicode_literals
 
 import os
 import time
-from unittest import TestCase
 
 from nose.tools import *
 from mock import *

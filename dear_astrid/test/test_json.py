@@ -3,8 +3,6 @@
 
 from __future__ import unicode_literals
 
-from unittest import TestCase
-
 import dear_astrid.json as daj
 from dear_astrid.test.helpers import *
 
