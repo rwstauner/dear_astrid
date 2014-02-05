@@ -1,10 +1,11 @@
+# pylint: disable=wildcard-import,too-many-public-methods,missing-docstring
+# pylint: disable=invalid-name
+
 import datetime
 import os
 import re
 import time
 import unittest
-
-# pylint: disable=wildcard-import,invalid-name
 
 from dear_astrid.constants import *
 from dear_astrid.constants import __all__ as _constants_all
@@ -30,7 +31,8 @@ class timezone(object):
     self.tz = tz
     self.orig = None
 
-  def set_env(self, tz):
+  @classmethod
+  def set_env(cls, tz):
     if tz is None:
       if 'TZ' in os.environ:
         del os.environ['TZ']
