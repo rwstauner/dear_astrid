@@ -14,17 +14,21 @@ def one_task(fragment):
     '<astrid format="2">{0}</astrid>'.format(fragment)
   )[0]
 
-def test_parse_xml():
-  assert_raises(AstridValueError, parse_xml, """<astrid format="3"/>""")
+class TestParseXML(TestCase):
+  # pylint: disable=too-many-public-methods,no-member
 
-  assert_equal(
-    one_task(
+  def assert_task_parses(self, xml, exp):
+    self.assert_equal(one_task(xml), exp)
+
+  def test_parse_xml_unkown_format(self):
+    self.assert_raises(AstridValueError, parse_xml, """<astrid format="3"/>""")
+
+  def test_basic_tasks(self):
+    self.assert_task_parses(
       '''
       <task title="squid" importance="2" dueDate="1399748400402"
       recurrence="" repeatUntil="0" deleted="0" completed="0"/>
-      '''
-    ),
-    {
+      ''', {
       'title':        'squid',
       'priority':     2,
       'due_date':     dtu(2014,  5, 10, 19,  0,  0, 402000),
@@ -36,20 +40,16 @@ def test_parse_xml():
       'elapsed':      0,
       'tags':         ['astrid'],
       'notes':        None,
-    }
-  )
+    })
 
-  assert_equal(
-    one_task(
+    self.assert_task_parses(
       '''
   <task attachments_pushed_at="0" calendarUri="" classification="" completed="0" created="1370213954565" creatorId="0" deleted="0" detailsDate="0" dueDate="1370397301000" elapsedSeconds="0" estimatedSeconds="0" flags="0" hideUntil="1369724400000" historyFetch="0" historyHasMore="0" importance="2" is_public="0" is_readonly="0" lastSync="0" modified="1370214160202" notes="First note&#10;Here" postponeCount="0" pushedAt="0" recurrence="RRULE:FREQ=DAILY;INTERVAL=12" notificationFlags="6" lastNotified="0" notifications="1209600000" snoozeTime="0" repeatUntil="1405817701000" socialReminder="unseen" timerStart="0" title="repeat and remind" user="" activities_pushed_at="0" userId="0" remoteId="950575745031257201">
     <metadata created="1370214160080" deleted="0" key="alarm" value="1370214097446" value2="1" />
     <metadata created="0" deleted="0" key="tags-tag" value="section 8" value2="2153874380669753982" value3="950575745031257201" />
     <metadata created="0" deleted="0" key="tags-tag" value="Hard cheese" value2="799352962683373419" value3="950575745031257201" />
   </task>
-      '''
-    ),
-    {
+      ''', {
       'title':        'repeat and remind',
       'priority':     2,
       'due_date':     dtu(2013,  6,  5,  1, 55,  1),
@@ -61,16 +61,12 @@ def test_parse_xml():
       'elapsed':      0,
       'notes':        "First note\nHere",
       'tags':         ['astrid', 'section 8', 'Hard cheese'],
-    }
-  )
+    })
 
-  assert_equal(
-    one_task(
+    self.assert_task_parses(
       '''
   <task attachments_pushed_at="0" calendarUri="" classification="" completed="1370214214527" created="1370214183094" creatorId="0" deleted="0" detailsDate="0" dueDate="0" elapsedSeconds="0" estimatedSeconds="0" flags="0" hideUntil="0" historyFetch="0" historyHasMore="0" importance="3" is_public="0" is_readonly="0" lastSync="0" modified="1370214214638" notes="" postponeCount="0" pushedAt="0" recurrence="" notificationFlags="6" lastNotified="0" notifications="0" snoozeTime="0" repeatUntil="0" socialReminder="unseen" timerStart="0" title="Completed no priority" user="" activities_pushed_at="0" userId="0" remoteId="4514989953482146569" />
-      '''
-    ),
-    {
+      ''', {
       'title':        'Completed no priority',
       'priority':     3,
       'due_date':     None,
@@ -82,19 +78,15 @@ def test_parse_xml():
       'elapsed':      0,
       'notes':        None,
       'tags':         ['astrid'],
-    }
-  )
+    })
 
-  assert_equal(
-    one_task(
+    self.assert_task_parses(
       '''
   <task attachments_pushed_at="0" calendarUri="" classification="" completed="0" created="1370214247839" creatorId="0" deleted="0" detailsDate="0" dueDate="0" elapsedSeconds="0" estimatedSeconds="0" flags="0" hideUntil="0" historyFetch="0" historyHasMore="0" importance="0" is_public="0" is_readonly="0" lastSync="0" modified="1370234693330" notes="No, really" postponeCount="0" pushedAt="0" recurrence="" notificationFlags="6" lastNotified="0" notifications="0" snoozeTime="0" repeatUntil="0" socialReminder="unseen" timerStart="0" title="Really important" user="" activities_pushed_at="0" userId="0" remoteId="1480747625840088568">
     <metadata created="0" deleted="0" key="tags-tag" value="section 8" value2="2153874380669753982" value3="1480747625840088568" />
     <metadata created="0" deleted="0" key="tags-tag" value="nifty" value2="654272611227692712" value3="1480747625840088568" />
   </task>
-      '''
-    ),
-    {
+      ''', {
       'title':        'Really important',
       'priority':     0,
       'due_date':     None,
@@ -106,18 +98,14 @@ def test_parse_xml():
       'elapsed':      0,
       'notes':        'No, really',
       'tags':         ['astrid', 'section 8', 'nifty'],
-    }
-  )
+    })
 
-  assert_equal(
-    one_task(
+    self.assert_task_parses(
       '''
   <task attachments_pushed_at="0" calendarUri="" classification="" completed="0" created="1370214439149" creatorId="0" deleted="0" detailsDate="0" dueDate="0" elapsedSeconds="2100" estimatedSeconds="8100" flags="0" hideUntil="0" historyFetch="0" historyHasMore="0" importance="1" is_public="0" is_readonly="0" lastSync="0" modified="1370234827340" notes="" postponeCount="0" pushedAt="0" recurrence="RRULE:FREQ=WEEKLY;INTERVAL=3;BYDAY=TH" notificationFlags="6" lastNotified="0" notifications="0" snoozeTime="0" repeatUntil="0" socialReminder="unseen" timerStart="0" title="Funky ch&amp;rs !n ^title a =b" user="" activities_pushed_at="0" userId="0" remoteId="583744141993888906">
     <metadata created="0" deleted="0" key="tags-tag" value="Hard cheese" value2="799352962683373419" value3="583744141993888906" />
   </task>
-      '''
-    ),
-    {
+      ''', {
       'title':        'Funky ch&rs !n ^title a =b',
       'priority':     1,
       'due_date':     None,
@@ -129,18 +117,14 @@ def test_parse_xml():
       'elapsed':      2100,
       'notes':        None,
       'tags':         ['astrid', 'Hard cheese'],
-    }
-  )
+    })
 
-  assert_equal(
-    one_task(
+    self.assert_task_parses(
       '''
   <task attachments_pushed_at="0" calendarUri="" classification="" completed="1373263304672" created="1373263156134" creatorId="0" deleted="1373263316297" detailsDate="0" dueDate="0" elapsedSeconds="5100" estimatedSeconds="6900" flags="0" hideUntil="0" historyFetch="0" historyHasMore="0" importance="2" is_public="0" is_readonly="0" lastSync="0" modified="1373263316297" notes="Enough said" postponeCount="0" pushedAt="0" recurrence="" notificationFlags="6" lastNotified="0" notifications="1209600000" snoozeTime="0" repeatUntil="0" socialReminder="unseen" timerStart="0" title="Completed and deleted" user="" activities_pushed_at="0" userId="0" remoteId="4407620889991601387">
     <metadata created="1373263296778" deleted="0" key="alarm" value="1373263272089" value2="1" />
   </task>
-      '''
-    ),
-    {
+      ''', {
       'title':        'Completed and deleted',
       'priority':     2,
       'due_date':     None,
@@ -152,8 +136,8 @@ def test_parse_xml():
       'elapsed':      5100,
       'notes':        'Enough said',
       'tags':         ['astrid'],
-    }
-  )
+    })
+
 
 def test_parse_timestamp():
   def t(stamp, exp):
