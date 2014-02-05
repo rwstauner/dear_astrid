@@ -70,9 +70,13 @@ def parse_task(element):
   }
 
   for extra in element.getElementsByTagName('metadata'):
-    if extra.getAttribute('key') == 'tags-tag':
+    key = extra.getAttribute('key')
+    if key == 'tags-tag':
       task['tags'].append(extra.getAttribute('value'))
-    # TODO: alarm
+    elif key == 'alarm':
+      if 'alarms' not in task:
+        task['alarms'] = []
+      task['alarms'].append(parse_timestamp(extra.getAttribute('value')))
 
   return task
 

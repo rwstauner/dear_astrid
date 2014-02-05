@@ -46,6 +46,8 @@ class TestParseXML(TestCase):
       '''
   <task attachments_pushed_at="0" calendarUri="" classification="" completed="0" created="1370213954565" creatorId="0" deleted="0" detailsDate="0" dueDate="1370397301000" elapsedSeconds="0" estimatedSeconds="0" flags="0" hideUntil="1369724400000" historyFetch="0" historyHasMore="0" importance="2" is_public="0" is_readonly="0" lastSync="0" modified="1370214160202" notes="First note&#10;Here" postponeCount="0" pushedAt="0" recurrence="RRULE:FREQ=DAILY;INTERVAL=12" notificationFlags="6" lastNotified="0" notifications="1209600000" snoozeTime="0" repeatUntil="1405817701000" socialReminder="unseen" timerStart="0" title="repeat and remind" user="" activities_pushed_at="0" userId="0" remoteId="950575745031257201">
     <metadata created="1370214160080" deleted="0" key="alarm" value="1370214097446" value2="1" />
+    <metadata created="1391488218791" deleted="0" key="alarm" value="1391488194403" value2="1" />
+    <metadata created="1391490169164" deleted="0" key="alarm" value="1391475600000" value2="1" />
     <metadata created="0" deleted="0" key="tags-tag" value="section 8" value2="2153874380669753982" value3="950575745031257201" />
     <metadata created="0" deleted="0" key="tags-tag" value="Hard cheese" value2="799352962683373419" value3="950575745031257201" />
   </task>
@@ -61,6 +63,11 @@ class TestParseXML(TestCase):
       'elapsed':      0,
       'notes':        "First note\nHere",
       'tags':         ['astrid', 'section 8', 'Hard cheese'],
+      'alarms':       [
+        dtu(2013,  6,  2, 23,  1, 37, 446000),
+        dtu(2014,  2,  4,  4, 29, 54, 403000),
+        dtu(2014,  2,  4,  1,  0,  0),
+      ],
     })
 
     self.assert_task_parses(
@@ -136,6 +143,7 @@ class TestParseXML(TestCase):
       'elapsed':      5100,
       'notes':        'Enough said',
       'tags':         ['astrid'],
+      'alarms':       [dtu(2013,  7,  8,  6,  1, 12,  89000)],
     })
 
 
