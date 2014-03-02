@@ -26,12 +26,15 @@ def format_task(oldtask):
 
   newtask = {
     'name':     oldtask['title'],
-    'notes':    oldtask['notes'],
+    'notes':    [],
     'priority': format_priority(oldtask['priority']),
     'repeat':   format_repeat(oldtask['recurrence'], oldtask['repeat_until']),
     # make a copy so we can modify it
     'tags':     list(oldtask['tags']),
   }
+
+  if oldtask['notes']:
+    newtask['notes'].append(oldtask['notes'])
 
   # datetime
   for ts in ('due_date',):
@@ -50,6 +53,9 @@ def format_task(oldtask):
 
   if newtask['notes']:
     newtask['tags'].append('astrid-notes')
+
+  if not newtask['notes']:
+    newtask['notes'] = None
 
   newtask['smart_add'] = smart_add(
     name      = newtask['name'],

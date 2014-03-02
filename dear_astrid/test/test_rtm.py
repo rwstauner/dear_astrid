@@ -72,7 +72,9 @@ class TestFormatTask(TestCase):
       'completed':    False,
       'deleted':      False,
       'estimated':    None,
-      'notes':        "First note\nHere",
+      'notes':        [
+        "First note\nHere",
+      ],
       'tags':         ['astrid', 'section 8', 'Hard cheese', 'astrid-notes'],
       'tz':           'America/Phoenix',
       'smart_add':    (
@@ -135,7 +137,7 @@ class TestFormatTask(TestCase):
       'completed':    False,
       'deleted':      False,
       'estimated':    None,
-      'notes':        'No, really',
+      'notes':        ['No, really'],
       'tags':         ['astrid', 'section 8', 'nifty', 'astrid-notes'],
       'smart_add':
         'Really important !1 #astrid #section 8 #nifty #astrid-notes',
@@ -199,7 +201,7 @@ class TestFormatTask(TestCase):
       'completed':    True,
       'deleted':      True,
       'estimated':    '115 min',
-      'notes':        'Enough said',
+      'notes':        ['Enough said'],
       'tags':         ['astrid', 'astrid-completed', 'astrid-deleted', 'astrid-notes'],
       'smart_add':    (
         'Completed and deleted'
