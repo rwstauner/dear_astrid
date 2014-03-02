@@ -1,4 +1,5 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
+# pylint: disable=too-many-public-methods,no-member
 
 from __future__ import unicode_literals
 
@@ -9,16 +10,17 @@ from nose.tools import *
 from dear_astrid.rtm import *
 from dear_astrid.test.helpers import *
 
-def test_format_task():
-  def t(tsk, exp):
+class TestFormatTask(TestCase):
+  def assert_format(self, tsk, exp):
     with timezone(exp.pop('tz', None)):
       tsk = format_task(tsk)
       # test smart_add separately to avoid excessively large diffs
       smarts = [ d.pop('smart_add', None) for d in (tsk, exp) ]
-      assert_equal(tsk, exp)
-      assert_equal(*smarts)
+      self.assert_equal(tsk, exp)
+      self.assert_equal(*smarts)
 
-  t(
+  def test_basic_task(self):
+    self.assert_format(
     {
       'title':        'squid',
       'priority':     2,
@@ -45,9 +47,10 @@ def test_format_task():
       'tz':           'US/Eastern',
       'smart_add':    'squid ^2014-05-10T08:00:00 !3 #astrid',
     },
-  )
+    )
 
-  t(
+  def test_repeat_and_remind(self):
+    self.assert_format(
     {
       'title':        'repeat and remind',
       'priority':     2,
@@ -78,9 +81,10 @@ def test_format_task():
         ' *Every 12 days until 2014-07-19T10:55:01'
       ),
     },
-  )
+    )
 
-  t(
+  def test_completed_no_priority(self):
+    self.assert_format(
     {
       'title':        'Completed no priority',
       'priority':     3,
@@ -106,9 +110,10 @@ def test_format_task():
       'tags':         ['astrid', 'astrid-completed'],
       'smart_add':    'Completed no priority !4 #astrid #astrid-completed',
     },
-  )
+    )
 
-  t(
+  def test_really_important(self):
+    self.assert_format(
     {
       'title':        'Really important',
       'priority':     0,
@@ -135,9 +140,10 @@ def test_format_task():
       'smart_add':
         'Really important !1 #astrid #section 8 #nifty #astrid-notes',
     },
-  )
+    )
 
-  t(
+  def test_funky_chars(self):
+    self.assert_format(
     {
       'title':        'Funky ch&rs !n ^title a =b',
       'priority':     1,
@@ -168,9 +174,10 @@ def test_format_task():
         ' =135 min'
       ),
     },
-  )
+    )
 
-  t(
+  def test_completed_and_deleted(self):
+    self.assert_format(
     {
       'title':        'Completed and deleted',
       'priority':     2,
@@ -200,7 +207,7 @@ def test_format_task():
         ' =115 min'
       ),
     },
-  )
+    )
 
 def test_format_date():
   def t(dto, exp, tz, loc):
