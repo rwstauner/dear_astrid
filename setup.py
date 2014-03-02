@@ -1,6 +1,7 @@
 # pylint: disable=invalid-name,missing-docstring
 
 from setuptools import setup, find_packages
+from dear_astrid import __version__
 
 try:
   import nose.commands
@@ -24,7 +25,7 @@ tests_require = [
 
 setup(
   name='dear_astrid',
-  version='0.1.0',
+  version=__version__,
 
   author='Randy Stauner',
   author_email='randy@magnificent-tears.com',

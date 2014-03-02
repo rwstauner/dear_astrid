@@ -6,6 +6,7 @@ from __future__ import print_function, unicode_literals
 
 import argparse
 
+from dear_astrid import __version__
 from dear_astrid.parser import parse_xml
 
 __all__ = []
@@ -52,6 +53,7 @@ def main():
   argp.add_argument('action', default='print', choices=actions.keys(),
     help='Action: What to do with parsed tasks')
   argp.add_argument('file', help='Path to Astrid backup xml file')
+  argp.add_argument('--version', action='version', version='%(prog)s ' + __version__)
   args = argp.parse_args()
 
   tasks = parse_xml(open(args.file).read())
