@@ -176,7 +176,7 @@ class TestFormatTask(TestCase):
       'notes':        None,
       'tags':         ['astrid', 'Hard cheese'],
       'smart_add':    (
-        'Funky ch&rs \!n \^title a \=b'
+        r'Funky ch&rs \!n \^title a \=b'
         ' !2 #astrid #Hard cheese'
         ' *Every 3 weeks on Thursday'
         ' =135 min'
