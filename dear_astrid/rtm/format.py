@@ -54,6 +54,12 @@ def format_task(oldtask):
   if newtask['notes']:
     newtask['tags'].append('astrid-notes')
 
+  if 'alarms' in oldtask and oldtask['alarms']:
+    newtask['tags'].append('astrid-alarms')
+    newtask['notes'].append("\n".join(['astrid-alarms:'] + [
+      ts.isoformat() for ts in oldtask['alarms']
+    ]))
+
   if not newtask['notes']:
     newtask['notes'] = None
 

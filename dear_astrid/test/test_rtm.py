@@ -63,6 +63,11 @@ class TestFormatTask(TestCase):
       'elapsed':      0,
       'notes':        "First note\nHere",
       'tags':         ['astrid', 'section 8', 'Hard cheese'],
+      'alarms':       [
+        dtu(2013,  6,  2, 23,  1, 37, 446000),
+        dtu(2014,  2,  4,  4, 29, 54, 403000),
+        dtu(2014,  2,  4,  1,  0,  0),
+      ],
     },
     {
       'name':         'repeat and remind',
@@ -74,12 +79,13 @@ class TestFormatTask(TestCase):
       'estimated':    None,
       'notes':        [
         "First note\nHere",
+        "astrid-alarms:\n2013-06-02T23:01:37.446000+00:00\n2014-02-04T04:29:54.403000+00:00\n2014-02-04T01:00:00+00:00",
       ],
-      'tags':         ['astrid', 'section 8', 'Hard cheese', 'astrid-notes'],
+      'tags':         ['astrid', 'section 8', 'Hard cheese', 'astrid-notes', 'astrid-alarms'],
       'tz':           'America/Phoenix',
       'smart_add':    (
         'repeat and remind ^2013-06-04T11:55:01'
-        ' !3 #astrid #section 8 #Hard cheese #astrid-notes'
+        ' !3 #astrid #section 8 #Hard cheese #astrid-notes #astrid-alarms'
         ' *Every 12 days until 2014-07-19T10:55:01'
       ),
     },
