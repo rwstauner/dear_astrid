@@ -183,7 +183,8 @@ class Importer(object):
       for note in notes:
         self.rtm.tasks.notes.add(note_title=note, note_text=note, **args)
 
-    # Does Astrid do URLs? self.rtm.setURL(url=task['url'], **args)
+    if task.get('url', None):
+      self.rtm.tasks.setURL(url=task['url'], **args)
 
     # do the status changes last
     if task.get('completed', None):

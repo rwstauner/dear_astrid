@@ -274,6 +274,17 @@ class TestRTMImport(TestCase):
       ],
     )
 
+  def test_add_with_url(self, *args):
+    self.assert_add_task_api_calls(
+      task={
+        'name': 'with url',
+        'url':  'http://example.com/dear/astrid',
+      },
+      calls=[
+        call.tasks.setURL(url='http://example.com/dear/astrid'),
+      ],
+    )
+
 @patch('rtm.createRTM')
 class TestBaseAuth(TestCase):
 
