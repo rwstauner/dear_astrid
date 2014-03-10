@@ -84,7 +84,7 @@ class CLIAuth(BaseAuth, CLIHelpers):
 
 
 class CLIImporter(Importer, CLIHelpers):
-  """Import astrid backup xml into RTM on the command line."""
+  """Import tasks into RTM on the command line."""
 
   default_auth = CLIAuth
 

@@ -94,7 +94,7 @@ class BaseAuth(object):
 
 
 class Importer(object):
-  """Import Astrid tasks into RTM."""
+  """Import tasks into RTM."""
 
   default_auth = BaseAuth
 
