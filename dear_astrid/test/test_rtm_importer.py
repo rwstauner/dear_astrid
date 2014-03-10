@@ -1,5 +1,5 @@
 # pylint: disable=wildcard-import,unused-wildcard-import,missing-docstring
-# pylint: disable=no-member,maybe-no-member
+# pylint: disable=no-member,maybe-no-member,unused-argument
 
 from __future__ import absolute_import, unicode_literals
 
@@ -123,7 +123,7 @@ class TestRTMImport(TestCase):
     self.assert_add_task_api_calls(task={}, calls=[],
       raises=KeyError, no_add=True)
 
-  def test_add_tasks(self, *args):
+  def test_add_basic_task(self, *args):
     self.assert_add_task_api_calls(
       task={
         'name':         'squid',
@@ -144,6 +144,7 @@ class TestRTMImport(TestCase):
       ],
     )
 
+  def test_add_repeat_and_remind(self, *args):
     self.assert_add_task_api_calls(
       task={
         'name':         'repeat and remind',
@@ -169,6 +170,7 @@ class TestRTMImport(TestCase):
       ],
     )
 
+  def test_add_completed_no_priority(self, *args):
     self.assert_add_task_api_calls(
       task={
         'name':         'Completed no priority',
@@ -184,6 +186,7 @@ class TestRTMImport(TestCase):
       ],
     )
 
+  def test_add_really_important(self, *args):
     self.assert_add_task_api_calls(
       task={
         'name':         'Really important',
@@ -204,6 +207,7 @@ class TestRTMImport(TestCase):
       ],
     )
 
+  def test_add_funky_chars(self, *args):
     self.assert_add_task_api_calls(
       task={
         'name':         'Funky ch&rs !n ^title a =b',
@@ -224,6 +228,7 @@ class TestRTMImport(TestCase):
       ],
     )
 
+  def test_add_completed_and_deleted(self, *args):
     self.assert_add_task_api_calls(
       task={
         'name':         'Completed and deleted',
@@ -247,6 +252,7 @@ class TestRTMImport(TestCase):
       ],
     )
 
+  def test_add_empty_list_of_notes(self, *args):
     self.assert_add_task_api_calls(
       task={
         'name':         'empty list of notes',
@@ -256,6 +262,7 @@ class TestRTMImport(TestCase):
       ],
     )
 
+  def test_add_multiple_notes(self, *args):
     self.assert_add_task_api_calls(
       task={
         'name':         'multiple notes',
