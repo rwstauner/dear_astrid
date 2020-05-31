@@ -26,3 +26,7 @@ def encode_datetime(obj):
 def dumps(struct, **kwargs):
   """Dump task list as JSON string."""
   return json.dumps(struct, default=encode_complex, **kwargs)
+
+def loads(string, **kwargs):
+  """Load object from JSON string."""
+  return json.loads(string, **kwargs)
