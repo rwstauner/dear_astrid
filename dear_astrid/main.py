@@ -5,6 +5,7 @@ Simple CLI app to parse and convert Astrid backup file.
 from __future__ import print_function, unicode_literals
 
 import argparse
+import sys
 
 from dear_astrid import __version__
 from dear_astrid.parser import parse_xml
@@ -26,13 +27,15 @@ def action(func=None, name=None):
   return func
 
 @action
-def json(tasks):
+def json(content):
   import dear_astrid.json
+  tasks = parse_xml(content)
   # TODO: Make kwargs configurable?  Use a separate raw_json action?
   print(dear_astrid.json.dumps(tasks, indent=2))
 
 @action(name='print')
-def print_tasks(tasks):
+def print_tasks(content):
+  tasks = parse_xml(content)
   for task in tasks:
     print("\n  {0}".format(task.get('title', '(unspecified)')))
 
@@ -47,18 +50,18 @@ def print_tasks(tasks):
       print("    {0}: {1}".format(key, val))
 
 def main():
-  """Parse Astrid backup xml file and convert the tasks to another format."""
+  """Parse backup file and convert the tasks to another format."""
 
   argp = argparse.ArgumentParser(description = main.__doc__)
   argp.add_argument('action', default='print', choices=actions.keys(),
     help='Action: What to do with parsed tasks')
-  argp.add_argument('file', help='Path to Astrid backup xml file')
+  argp.add_argument('file', help='Path to backup file')
   argp.add_argument('--version', action='version', version='%(prog)s ' + __version__)
   args = argp.parse_args()
 
-  tasks = parse_xml(open(args.file).read())
+  content = (sys.stdin if args.file == "-" else open(args.file)).read()
 
   if args.action in actions:
-    actions[args.action](tasks)
+    actions[args.action](content)
   else:
     raise 'Unknown action: {0}'.format(args.action)
