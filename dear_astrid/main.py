@@ -27,6 +27,13 @@ def action(func=None, name=None):
   return func
 
 @action
+def rtm_to_astrid(content):
+  from dear_astrid.rtm.parse import parse_export
+  from dear_astrid.formatter import format_xml
+  tasks = parse_export(content)
+  print(format_xml(tasks))
+
+@action
 def json(content):
   import dear_astrid.json
   tasks = parse_xml(content)
